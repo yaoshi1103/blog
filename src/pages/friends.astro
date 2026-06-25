@@ -1,0 +1,42 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { friendLinksConfig } from "../config";
+
+const friendLinks = friendLinksConfig.links;
+---
+<MainGridLayout title="友链" description="友链">
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <h2 class="text-2xl font-bold text-[var(--primary)] mb-4">友链</h2>
+            {friendLinks.length === 0 ? (
+                <div class="text-center text-black/50 dark:text-white/50 py-8">
+                    暂无友链，敬请期待
+                </div>
+            ) : (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+                    {friendLinks.map((friend) => (
+                        <a href={friend.url} target="_blank" rel="noopener"
+                           class="group flex items-center gap-4 p-4 rounded-[var(--radius-large)]
+                                  border border-[var(--card-border)] hover:border-[var(--primary)]
+                                  hover:scale-105 transition-all">
+                            {friend.avatar && (
+                                <img src={friend.avatar} alt={friend.name}
+                                     class="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+                            )}
+                            <div class="min-w-0">
+                                <div class="font-bold group-hover:text-[var(--primary)] transition truncate">
+                                    {friend.name}
+                                </div>
+                                {friend.description && (
+                                    <div class="text-sm text-black/60 dark:text-white/60 truncate">
+                                        {friend.description}
+                                    </div>
+                                )}
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    </div>
+</MainGridLayout>

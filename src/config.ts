@@ -1,5 +1,6 @@
 import type {
 	ExpressiveCodeConfig,
+	FriendLinksConfig,
 	LicenseConfig,
 	NavBarConfig,
 	ProfileConfig,
@@ -43,7 +44,22 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
+		{ name: "项目", url: "/projects/" },
 		LinkPreset.About,
+		{ name: "友链", url: "/friends/" },
+	],
+};
+
+export const friendLinksConfig: FriendLinksConfig = {
+	links: [
+		// 暂无友链，后续在此处添加
+		// 示例：
+		// {
+		// 	name: "好友名称",
+		// 	url: "https://example.com",
+		// 	avatar: "https://example.com/avatar.png",
+		// 	description: "好友博客的简短描述",
+		// },
 	],
 };
 

@@ -33,3 +33,6 @@ yarn.lock
 
 # WorkBuddy 本地工作目录（不推送）
 .workbuddy/
+
+# Trae 计划文档（不推送）
+.trae/
