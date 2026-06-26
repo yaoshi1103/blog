@@ -1,6 +1,6 @@
 # Blue Blog
 
-我的个人博客，记录日常思考和笔记。
+这是我的个人博客，记录日常思考和笔记。
 
 **网址**：[blog.to-lunastra.workers.dev](https://blog.to-lunastra.workers.dev)
 
