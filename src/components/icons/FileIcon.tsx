@@ -171,6 +171,14 @@ export const ProductOSIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) =>
   </svg>
 );
 
+// GitHub icon
+export const GitHubIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <circle cx="24" cy="24" r="20" fill="#1a1a1a" stroke="#555" strokeWidth="1" />
+    <path d="M24 6C14.06 6 6 14.06 6 24c0 7.95 5.16 14.7 12.31 17.08.9.17 1.23-.39 1.23-.87 0-.43-.02-1.85-.02-3.35-5.01 1.09-6.06-2.42-6.06-2.42-.82-2.08-2-2.64-2-2.64-1.64-1.12.12-1.1.12-1.1 1.81.13 2.76 1.86 2.76 1.86 1.61 2.76 4.22 1.96 5.25 1.5.16-1.17.63-1.96 1.15-2.41-4.01-.46-8.22-2.01-8.22-8.94 0-1.97.7-3.58 1.86-4.85-.19-.46-.81-2.29.18-4.78 0 0 1.51-.48 4.96 1.85a17.3 17.3 0 019.02 0c3.45-2.33 4.96-1.85 4.96-1.85.99 2.49.37 4.32.18 4.78a7.03 7.03 0 011.86 4.85c0 6.95-4.22 8.48-8.24 8.93.65.56 1.22 1.66 1.22 3.34 0 2.41-.02 4.35-.02 4.94 0 .48.33 1.04 1.23.87A18.02 18.02 0 0042 24c0-9.94-8.06-18-18-18z" fill="white" />
+  </svg>
+);
+
 // PostHog Logo - hedgehog
 export const PostHogLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" {...props}>

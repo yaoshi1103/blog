@@ -6,7 +6,7 @@ import { DesktopIconData } from '@/lib/constants';
 import {
   FileIcon, FolderIcon, TrashIcon, SignupIcon, PricingIcon,
   DemoIcon, DocsIcon, EmailIcon, QuestionIcon, ChartIcon,
-  ChangelogIcon, HandbookIcon, StoreIcon, WorkIcon, SwitchModeIcon, ProductOSIcon,
+  ChangelogIcon, HandbookIcon, StoreIcon, WorkIcon, SwitchModeIcon, ProductOSIcon, GitHubIcon,
 } from './icons';
 
 const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -20,7 +20,7 @@ const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   docs: DocsIcon,
   talk: EmailIcon,
   question: QuestionIcon,
-  why: ChartIcon,
+  why: GitHubIcon,
   changelog: ChangelogIcon,
   handbook: HandbookIcon,
   store: StoreIcon,
@@ -67,13 +67,13 @@ export default function DesktopIcon({ icon, isSelected, onClick, onDoubleClick }
         )}
       </motion.div>
       <span
-        className={`icon-label text-xs text-center px-1.5 py-0.5 rounded leading-tight max-w-full break-words ${
+        className={`icon-label text-xs text-center leading-tight max-w-full break-words ${
           isSelected 
-            ? 'bg-blue-500 text-white' 
-            : 'bg-white/80 text-gray-900'
+            ? 'text-blue-400' 
+            : 'text-white'
         }`}
         style={{
-          textShadow: isSelected ? 'none' : '0 1px 0 rgba(255,255,255,0.8)',
+          textShadow: '0 1px 3px rgba(0,0,0,0.6)',
         }}
       >
         {icon.label}

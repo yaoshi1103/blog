@@ -8,19 +8,16 @@ export interface DesktopIconData {
 }
 
 export const leftIcons: DesktopIconData[] = [
-  { id: 'home', label: 'home.mdx', href: '/', column: 'left', hasFileExtension: true },
-  { id: 'signup', label: 'Sign up \u2197', href: 'https://app.posthog.com/signup', column: 'left', isExternal: true },
-  { id: 'product-os', label: 'Product OS', column: 'left' },
-  { id: 'switch-mode', label: 'Switch to website mode', column: 'left' },
-  { id: 'pricing', label: 'Pricing', column: 'left' },
-  { id: 'customers', label: 'customers.mdx', column: 'left', hasFileExtension: true },
-  { id: 'demo', label: 'demo.mov', column: 'left', hasFileExtension: true },
-  { id: 'docs', label: 'Docs', column: 'left' },
-  { id: 'talk', label: 'Talk to a human', column: 'left' },
+  { id: 'home', label: '首页', column: 'left' },
+  { id: 'signup', label: '文章', column: 'left' },
+  { id: 'product-os', label: '随笔', column: 'left' },
+  { id: 'switch-mode', label: '项目', column: 'left' },
+  { id: 'pricing', label: '关于', column: 'left' },
+  { id: 'customers', label: '友链', column: 'left' },
 ];
 
 export const rightIcons: DesktopIconData[] = [
-  { id: 'why', label: 'Why PostHog?', column: 'right' },
+  { id: 'why', label: 'GitHub', column: 'right' },
   { id: 'changelog', label: 'Changelog', column: 'right' },
   { id: 'handbook', label: 'Company handbook', column: 'right' },
   { id: 'store', label: 'Store', column: 'right' },
@@ -29,9 +26,10 @@ export const rightIcons: DesktopIconData[] = [
 ];
 
 export const menuLinks = [
-  { label: 'Pricing', href: '#' },
-  { label: 'Docs', href: '#' },
-  { label: 'Community', href: '#' },
-  { label: 'Company', href: '#' },
-  { label: 'More', href: '#' },
+  { label: '首页', href: '#' },
+  { label: '文章', href: '#' },
+  { label: '随笔', href: '#' },
+  { label: '项目', href: '#' },
+  { label: '关于', href: '#' },
+  { label: '友链', href: '#' },
 ];

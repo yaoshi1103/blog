@@ -15,5 +15,6 @@ export {
   WorkIcon,
   SwitchModeIcon,
   ProductOSIcon,
+  GitHubIcon,
   PostHogLogo,
 } from './FileIcon';
