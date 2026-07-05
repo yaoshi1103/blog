@@ -89,20 +89,49 @@ export default function Desktop() {
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           >
-            {/* Window title bar */}
-            <div className="flex items-center justify-between px-3 py-2 bg-gray-100 border-b border-gray-200">
-              <div className="flex items-center gap-1.5">
+            {/* Window title bar - Windows 11 style */}
+            <div className="flex items-center justify-between h-9 px-2 bg-white border-b border-gray-200">
+              {/* Left: icon + title */}
+              <div className="flex items-center gap-2 px-1 min-w-0">
+                <div className="w-3.5 h-3.5 bg-blue-500 rounded-sm flex-shrink-0" />
+                <span className="text-xs font-medium text-gray-700 truncate">
+                  {getIconLabel(windowId)}
+                </span>
+              </div>
+              {/* Right: window controls */}
+              <div className="flex items-center h-full flex-shrink-0">
+                {/* Minimize */}
+                <button
+                  className="flex items-center justify-center w-11 h-full hover:bg-gray-200/70 transition-colors"
+                  aria-label="Minimize"
+                  title="Minimize"
+                >
+                  <svg className="w-2.5 h-2.5 text-gray-700" viewBox="0 0 10 10" fill="none">
+                    <path d="M0 5 H10" stroke="currentColor" strokeWidth="1" />
+                  </svg>
+                </button>
+                {/* Maximize */}
+                <button
+                  className="flex items-center justify-center w-11 h-full hover:bg-gray-200/70 transition-colors"
+                  aria-label="Maximize"
+                  title="Maximize"
+                >
+                  <svg className="w-2.5 h-2.5 text-gray-700" viewBox="0 0 10 10" fill="none">
+                    <rect x="0.5" y="0.5" width="9" height="9" stroke="currentColor" strokeWidth="1" fill="none" />
+                  </svg>
+                </button>
+                {/* Close */}
                 <button
                   onClick={() => closeWindow(windowId)}
-                  className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors"
-                />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
+                  className="flex items-center justify-center w-11 h-full hover:bg-red-500 text-gray-700 hover:text-white transition-colors"
+                  aria-label="Close"
+                  title="Close"
+                >
+                  <svg className="w-2.5 h-2.5" viewBox="0 0 10 10" fill="none">
+                    <path d="M0 0 L10 10 M10 0 L0 10" stroke="currentColor" strokeWidth="1" />
+                  </svg>
+                </button>
               </div>
-              <span className="text-xs font-medium text-gray-600 truncate mx-2">
-                {getIconLabel(windowId)}
-              </span>
-              <div className="w-12" />
             </div>
             {/* Window content */}
             <div className="p-4 text-sm text-gray-500">
