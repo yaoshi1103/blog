@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --desktop-bg: #e8e0d5;
+  --menu-bar-bg: #1a1a1a;
+  --menu-bar-text: #ffffff;
+  --cta-orange: #f54e00;
+  --cta-orange-hover: #e04d00;
+  --icon-text: #1a1a1a;
+  --icon-label-bg: rgba(255, 255, 255, 0.85);
+  --icon-selected-bg: #3b82f6;
+  --icon-selected-text: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Chicago', 'Geneva', 'Charcoal', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  color: var(--icon-text);
+  background: var(--desktop-bg);
+}
+
+/* Desktop noise texture overlay */
+.desktop-noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Desktop icon text selection style */
+.desktop-icon.selected .icon-label {
+  background-color: var(--icon-selected-bg);
+  color: var(--icon-selected-text);
+}
+
+/* Menu bar styles */
+.menu-bar {
+  background: var(--menu-bar-bg);
+  color: var(--menu-bar-text);
+}
+
+/* Notification toast animation */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
