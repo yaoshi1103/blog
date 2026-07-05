@@ -9,6 +9,7 @@ import { leftIcons, rightIcons } from '@/lib/constants';
 export default function Desktop() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [openWindows, setOpenWindows] = useState<string[]>([]);
+  const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
 
   const handleIconClick = useCallback((id: string) => {
     setSelectedId((prev) => (prev === id ? null : id));
@@ -16,13 +17,33 @@ export default function Desktop() {
 
   const handleIconDoubleClick = useCallback((id: string) => {
     setOpenWindows((prev) => {
-      if (prev.includes(id)) return prev;
-      return [...prev, id];
+      if (!prev.includes(id)) {
+        // 没打开 → 打开
+        return [...prev, id];
+      }
+      return prev;
     });
+    // 如果已打开但最小化 → 恢复显示
+    setMinimizedWindows((prev) => prev.filter((w) => w !== id));
   }, []);
 
   const closeWindow = useCallback((id: string) => {
     setOpenWindows((prev) => prev.filter((w) => w !== id));
+    setMinimizedWindows((prev) => prev.filter((w) => w !== id));
+  }, []);
+
+  const minimizeWindow = useCallback((id: string) => {
+    setMinimizedWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  }, []);
+
+  // 任务栏图标点击：可见→最小化，最小化→恢复
+  const handleTaskbarClick = useCallback((id: string) => {
+    setMinimizedWindows((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((w) => w !== id);
+      }
+      return [...prev, id];
+    });
   }, []);
 
   const getIconLabel = (id: string): string => {
@@ -74,7 +95,7 @@ export default function Desktop() {
 
       {/* Open windows (simulated) */}
       <AnimatePresence>
-        {openWindows.map((windowId, index) => (
+        {openWindows.filter((id) => !minimizedWindows.includes(id)).map((windowId, index) => (
           <motion.div
             key={windowId}
             className="absolute bg-white rounded-lg shadow-2xl border border-gray-300 overflow-hidden z-30"
@@ -104,6 +125,7 @@ export default function Desktop() {
               <div className="flex items-center h-full flex-shrink-0">
                 {/* Minimize */}
                 <button
+                  onClick={() => minimizeWindow(windowId)}
                   className="flex items-center justify-center w-11 h-full hover:bg-gray-200/70 transition-colors"
                   aria-label="Minimize"
                   title="Minimize"
@@ -145,7 +167,12 @@ export default function Desktop() {
       </AnimatePresence>
 
       {/* Windows-style Taskbar */}
-      <Dock />
+      <Dock
+        openWindows={openWindows}
+        minimizedWindows={minimizedWindows}
+        onTaskbarClick={handleTaskbarClick}
+        getIconLabel={getIconLabel}
+      />
     </div>
   );
 }

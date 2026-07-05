@@ -2,30 +2,17 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  FileIcon, FolderIcon, TrashIcon, PricingIcon,
-  DemoIcon, DocsIcon, QuestionIcon, ChartIcon,
-  HandbookIcon, StoreIcon,
-} from './icons';
+import { iconMap } from './DesktopIcon';
 
-const taskbarApps = [
-  { id: 'explorer', icon: FolderIcon, label: 'File Explorer', active: true },
-  { id: 'docs', icon: DocsIcon, label: 'Docs', active: false },
-  { id: 'pricing', icon: PricingIcon, label: 'Pricing', active: false },
-  { id: 'demo', icon: DemoIcon, label: 'Demo', active: false },
-  { id: 'handbook', icon: HandbookIcon, label: 'Handbook', active: false },
-  { id: 'store', icon: StoreIcon, label: 'Store', active: false },
-];
+interface TaskbarProps {
+  openWindows: string[];
+  minimizedWindows: string[];
+  onTaskbarClick: (id: string) => void;
+  getIconLabel: (id: string) => string;
+}
 
-export default function Taskbar() {
+export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick, getIconLabel }: TaskbarProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [activeApps, setActiveApps] = useState<string[]>(['explorer']);
-
-  const toggleActive = (id: string) => {
-    setActiveApps((prev) =>
-      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
-    );
-  };
 
   const now = new Date();
   const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
@@ -69,29 +56,31 @@ export default function Taskbar() {
       {/* Divider */}
       <div className="w-px h-6 bg-black/10 mx-1" />
 
-      {/* App Icons - centered */}
+      {/* Open windows - centered */}
       <div className="flex items-center gap-0.5 flex-1 justify-center">
-        {taskbarApps.map((app) => {
-          const Icon = app.icon;
-          const isActive = activeApps.includes(app.id);
-          const isHovered = hoveredId === app.id;
+        {openWindows.map((appId) => {
+          const Icon = iconMap[appId];
+          if (!Icon) return null;
+          const isVisible = !minimizedWindows.includes(appId);
+          const isHovered = hoveredId === appId;
+          const label = getIconLabel(appId);
 
           return (
-            <div key={app.id} className="relative flex flex-col items-center">
+            <div key={appId} className="relative flex flex-col items-center">
               <button
                 className="relative flex items-center justify-center w-10 h-10 rounded-md hover:bg-black/5 transition-colors"
-                onMouseEnter={() => setHoveredId(app.id)}
+                onMouseEnter={() => setHoveredId(appId)}
                 onMouseLeave={() => setHoveredId(null)}
-                onClick={() => toggleActive(app.id)}
+                onClick={() => onTaskbarClick(appId)}
               >
                 <Icon className="w-5 h-5 drop-shadow-sm" />
               </button>
-              {/* Active indicator bar */}
+              {/* Active indicator bar: 可见=长蓝条, 最小化=短蓝条 */}
               <motion.div
                 className="absolute -bottom-0.5 h-0.5 rounded-full bg-blue-500"
                 animate={{
-                  width: isActive ? 12 : 0,
-                  opacity: isActive ? 1 : 0,
+                  width: isVisible ? 12 : 4,
+                  opacity: 1,
                 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
               />
@@ -104,7 +93,7 @@ export default function Taskbar() {
                   exit={{ opacity: 0, y: 4 }}
                   transition={{ duration: 0.12 }}
                 >
-                  {app.label}
+                  {label}
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45" />
                 </motion.div>
               )}

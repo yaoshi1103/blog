@@ -9,7 +9,7 @@ import {
   ChangelogIcon, HandbookIcon, StoreIcon, WorkIcon, SwitchModeIcon, ProductOSIcon, GitHubIcon,
 } from './icons';
 
-const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
+export const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   home: FileIcon,
   signup: SignupIcon,
   'product-os': ProductOSIcon,
