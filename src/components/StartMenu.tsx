@@ -22,12 +22,12 @@ export default function StartMenu({ onClose, onOpen }: StartMenuProps) {
     ? allItems.filter((item) => item.label.includes(searchQuery))
     : allItems;
 
-  // 磁贴区：4 个主要入口
+  // 磁贴区：4 个主要入口。invert=false 用图标原色（GitHub 黑圆+白octocat 在黑磁贴上自然醒目），invert=true 用 brightness-0 invert 变白
   const tiles = [
-    { id: 'signup', label: '文章', color: '#4a90d9' },
-    { id: 'why', label: 'GitHub', color: '#1a1a1a' },
-    { id: 'changelog', label: 'Bilibili', color: '#FB7299' },
-    { id: 'handbook', label: '此电脑', color: '#4a5a6c' },
+    { id: 'signup', label: '文章', color: '#4a90d9', invert: true },
+    { id: 'why', label: 'GitHub', color: '#1a1a1a', invert: false },
+    { id: 'changelog', label: 'Bilibili', color: '#FB7299', invert: true },
+    { id: 'handbook', label: '此电脑', color: '#4a5a6c', invert: true },
   ];
 
   // 点击外部关闭（延迟绑定，避免触发打开菜单的那次 mousedown）
@@ -63,7 +63,7 @@ export default function StartMenu({ onClose, onOpen }: StartMenuProps) {
   return (
     <motion.div
       ref={menuRef}
-      className="fixed bottom-9 left-1 z-50 rounded-lg shadow-2xl border border-gray-300 overflow-hidden flex flex-col"
+      className="fixed bottom-9 left-0 z-50 rounded-t-lg shadow-2xl border border-gray-300 overflow-hidden flex flex-col"
       style={{
         width: '440px',
         height: '460px',
@@ -128,7 +128,7 @@ export default function StartMenu({ onClose, onOpen }: StartMenuProps) {
                   className="flex flex-col items-center justify-center gap-1.5 rounded-md p-3 hover:opacity-90 transition-opacity"
                   style={{ background: tile.color, height: '76px' }}
                 >
-                  {Icon && <Icon className="w-7 h-7 brightness-0 invert" />}
+                  {Icon && <Icon className={`w-7 h-7 ${tile.invert ? 'brightness-0 invert' : ''}`} />}
                   <span className="text-xs text-white font-medium">{tile.label}</span>
                 </button>
               );
