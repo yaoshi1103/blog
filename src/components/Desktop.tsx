@@ -111,10 +111,12 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
       {/* Video background */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
+        poster="/poster.jpg"
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
       >
         <source src="/bizhi.mp4" type="video/mp4" />
       </video>
