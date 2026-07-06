@@ -6,7 +6,7 @@ import { DesktopIconData } from '@/lib/constants';
 import {
   FileIcon, FolderIcon, TrashIcon, SignupIcon, PricingIcon,
   DemoIcon, DocsIcon, EmailIcon, QuestionIcon,
-  ChangelogIcon, HandbookIcon, StoreIcon, WorkIcon, SwitchModeIcon, ProductOSIcon, GitHubIcon,
+  BilibiliIcon, HandbookIcon, StoreIcon, WorkIcon, SwitchModeIcon, ProductOSIcon, GitHubIcon,
 } from './icons';
 
 export const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -21,7 +21,7 @@ export const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = 
   talk: EmailIcon,
   question: QuestionIcon,
   why: GitHubIcon,
-  changelog: ChangelogIcon,
+  changelog: BilibiliIcon,
   handbook: HandbookIcon,
   store: StoreIcon,
   work: WorkIcon,

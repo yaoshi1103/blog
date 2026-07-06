@@ -10,6 +10,7 @@ export {
   QuestionIcon,
   ChartIcon,
   ChangelogIcon,
+  BilibiliIcon,
   HandbookIcon,
   StoreIcon,
   WorkIcon,
