@@ -16,6 +16,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
+  const [maximizedWindows, setMaximizedWindows] = useState<string[]>([]);
 
   const handleIconOpen = useCallback((id: string) => {
     setSelectedId(id);
@@ -35,10 +36,17 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
   const closeWindow = useCallback((id: string) => {
     setOpenWindows((prev) => prev.filter((w) => w !== id));
     setMinimizedWindows((prev) => prev.filter((w) => w !== id));
+    setMaximizedWindows((prev) => prev.filter((w) => w !== id));
   }, []);
 
   const minimizeWindow = useCallback((id: string) => {
     setMinimizedWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  }, []);
+
+  const toggleMaximize = useCallback((id: string) => {
+    setMaximizedWindows((prev) => (
+      prev.includes(id) ? prev.filter((w) => w !== id) : [...prev, id]
+    ));
   }, []);
 
   // 任务栏图标点击：可见→最小化，最小化→恢复
@@ -61,8 +69,23 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
     const windowEl = (e.currentTarget as HTMLElement).closest('.window-container') as HTMLElement;
     if (!windowEl) return;
     const parentEl = windowEl.offsetParent as HTMLElement | null;
-    const windowRect = windowEl.getBoundingClientRect();
     const parentRect = parentEl ? parentEl.getBoundingClientRect() : { left: 0, top: 0 };
+
+    // 如果是全屏状态，先还原成小窗口，保持最初打开时的位置（默认居中）
+    if (maximizedWindows.includes(windowId)) {
+      setMaximizedWindows((prev) => prev.filter((w) => w !== windowId));
+      // 还原到默认居中位置：清除已记录的位置，让样式回到 left:50%, top:50%
+      setWindowPositions((prev) => {
+        const next = { ...prev };
+        delete next[windowId];
+        return next;
+      });
+      // 不进入拖动流程，让窗口安静地回到原位
+      e.preventDefault();
+      return;
+    }
+
+    const windowRect = windowEl.getBoundingClientRect();
     // 用相对父容器的位置（viewport 坐标相减），避免切换定位方式时窗口跳动
     const relX = windowRect.left - parentRect.left;
     const relY = windowRect.top - parentRect.top;
@@ -78,7 +101,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
     };
     setDraggingId(windowId);
     e.preventDefault();
-  }, []);
+  }, [maximizedWindows]);
 
   useEffect(() => {
     if (!draggingId) return;
@@ -153,13 +176,17 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
           <motion.div
             key={windowId}
             className="absolute bg-white rounded-lg shadow-2xl border border-gray-300 overflow-hidden z-30 window-container"
-            style={{
-              width: '600px',
-              height: '500px',
-              ...(windowPositions[windowId]
-                ? { left: `${windowPositions[windowId].x}px`, top: `${windowPositions[windowId].y}px`, marginLeft: 0, marginTop: 0 }
-                : { left: '50%', top: '50%', marginLeft: '-300px', marginTop: '-250px' }),
-            }}
+            style={
+              maximizedWindows.includes(windowId)
+                ? { left: '0', top: '0', right: '0', bottom: '0', width: 'auto', height: 'auto', marginLeft: 0, marginTop: 0, borderRadius: 0 }
+                : {
+                    width: '600px',
+                    height: '500px',
+                    ...(windowPositions[windowId]
+                      ? { left: `${windowPositions[windowId].x}px`, top: `${windowPositions[windowId].y}px`, marginLeft: 0, marginTop: 0 }
+                      : { left: '50%', top: '50%', marginLeft: '-300px', marginTop: '-250px' }),
+                  }
+            }
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
@@ -179,7 +206,10 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
                 </span>
               </div>
               {/* Right: window controls */}
-              <div className="flex items-center h-full flex-shrink-0">
+              <div
+                className="flex items-center h-full flex-shrink-0"
+                onMouseDown={(e) => e.stopPropagation()}
+              >
                 {/* Minimize */}
                 <button
                   onClick={() => minimizeWindow(windowId)}
@@ -193,6 +223,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
                 </button>
                 {/* Maximize */}
                 <button
+                  onClick={() => toggleMaximize(windowId)}
                   className="flex items-center justify-center w-11 h-full hover:bg-gray-200/70 transition-colors"
                   aria-label="Maximize"
                   title="Maximize"
