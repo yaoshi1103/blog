@@ -8,7 +8,6 @@ export interface DesktopIconData {
 }
 
 export const leftIcons: DesktopIconData[] = [
-  { id: 'home', label: '首页', column: 'left' },
   { id: 'signup', label: '文章', column: 'left' },
   { id: 'product-os', label: '随笔', column: 'left' },
   { id: 'switch-mode', label: '项目', column: 'left' },
@@ -24,7 +23,6 @@ export const rightIcons: DesktopIconData[] = [
 ];
 
 export const menuLinks = [
-  { label: '首页', href: '#', iconId: 'home' },
   { label: '文章', href: '#', iconId: 'signup' },
   { label: '随笔', href: '#', iconId: 'product-os' },
   { label: '项目', href: '#', iconId: 'switch-mode' },
