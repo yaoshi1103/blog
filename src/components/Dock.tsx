@@ -36,7 +36,7 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 h-11 z-50 flex items-center px-2"
+      className="fixed bottom-0 left-0 right-0 h-9 z-50 flex items-center px-2"
       style={{
         background: 'rgba(232, 234, 240, 0.88)',
         backdropFilter: 'blur(10px)',
@@ -45,7 +45,7 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
       }}
     >
       {/* Start Button */}
-      <button className="flex items-center justify-center w-10 h-10 rounded-md hover:bg-black/5 transition-colors mr-1">
+      <button className="flex items-center justify-center w-10 h-8 rounded-md hover:bg-black/5 transition-colors mr-1">
         <svg viewBox="0 0 16 16" className="w-4 h-4" fill="#333">
           <path d="M1 2l6-1v6H1V2zm0 7h6v6l-6-1V9zm7-8l7-1v6H8V1zm0 7h7v6l-7-1V8z" />
         </svg>
@@ -99,7 +99,7 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
       </div>
 
       {/* Task View */}
-      <button className="flex items-center justify-center w-10 h-10 rounded-md hover:bg-black/5 transition-colors mr-1">
+      <button className="flex items-center justify-center w-10 h-8 rounded-md hover:bg-black/5 transition-colors mr-1">
         <svg className="w-4 h-4 text-gray-500" viewBox="0 0 16 16" fill="currentColor">
           <rect x="1" y="1" width="6" height="5" rx="0.5" />
           <rect x="9" y="1" width="6" height="5" rx="0.5" />
@@ -123,7 +123,7 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
           return (
             <div key={appId} className="relative flex flex-col items-center">
               <button
-                className="relative flex items-center justify-center w-10 h-10 rounded-md hover:bg-black/5 transition-colors"
+                className="relative flex items-center justify-center w-10 h-8 rounded-md hover:bg-black/5 transition-colors"
                 onMouseEnter={() => setHoveredId(appId)}
                 onMouseLeave={() => setHoveredId(null)}
                 onClick={() => onTaskbarClick(appId)}
@@ -185,13 +185,13 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
         </button>
 
         {/* Clock */}
-        <button className="flex flex-col items-center justify-center px-2 h-10 rounded hover:bg-black/5 transition-colors text-gray-700 text-xs leading-tight">
+        <button className="flex flex-col items-center justify-center px-2 h-8 rounded hover:bg-black/5 transition-colors text-gray-700 text-xs leading-tight">
           <span>{timeStr}</span>
           <span className="text-[10px] text-gray-400">{dateStr}</span>
         </button>
 
         {/* Show desktop */}
-        <button className="w-1.5 h-10 hover:bg-black/5 transition-colors rounded-r-sm" />
+        <button className="w-1.5 h-8 hover:bg-black/5 transition-colors rounded-r-sm" />
       </div>
     </div>
   );

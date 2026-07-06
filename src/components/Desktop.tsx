@@ -130,7 +130,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
   };
 
   return (
-    <div className="fixed inset-0 top-12 pb-11 overflow-hidden" style={{ backgroundColor: '#1a1a2e' }}>
+    <div className="fixed inset-0 top-10 pb-9 overflow-hidden" style={{ backgroundColor: '#1a1a2e' }}>
       {/* Video background */}
       <video
         className="absolute inset-0 w-full h-full object-cover"

@@ -10,7 +10,7 @@ interface MenuBarProps {
 
 export default function MenuBar({ onNavigate }: MenuBarProps) {
   return (
-    <header className="fixed top-0 left-0 right-0 h-12 z-50 flex items-center px-4 select-none backdrop-blur border-b border-gray-200" style={{ background: 'rgba(232, 234, 240, 0.9)' }}>
+    <header className="fixed top-0 left-0 right-0 h-10 z-50 flex items-center px-4 select-none backdrop-blur border-b border-gray-200" style={{ background: 'rgba(232, 234, 240, 0.9)' }}>
       {/* Left: Logo */}
       <div className="flex items-center gap-2 mr-8">
         <PostHogLogo className="w-5 h-5" />
