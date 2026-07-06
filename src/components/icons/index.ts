@@ -11,6 +11,7 @@ export {
   ChartIcon,
   ChangelogIcon,
   BilibiliIcon,
+  ThisPCIcon,
   HandbookIcon,
   StoreIcon,
   WorkIcon,
