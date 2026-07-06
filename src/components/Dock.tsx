@@ -21,6 +21,9 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const [isTrayOverflowOpen, setIsTrayOverflowOpen] = useState(false);
   const trayOverflowRef = useRef<HTMLDivElement>(null);
+  const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
+  const [volume, setVolume] = useState(50);
+  const volumeSliderRef = useRef<HTMLDivElement>(null);
 
   const searchResults = searchQuery
     ? leftIcons.filter(icon => icon.label.includes(searchQuery))
@@ -51,6 +54,23 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
       document.removeEventListener('mousedown', handleClick);
     };
   }, [isTrayOverflowOpen]);
+
+  // 音量滑块：点击外部关闭
+  useEffect(() => {
+    if (!isVolumeSliderOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (volumeSliderRef.current && !volumeSliderRef.current.contains(e.target as Node)) {
+        setIsVolumeSliderOpen(false);
+      }
+    };
+    const timer = setTimeout(() => {
+      document.addEventListener('mousedown', handleClick);
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, [isVolumeSliderOpen]);
 
   const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
   const dateStr = now.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
@@ -276,12 +296,67 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
           </svg>
         </button>
 
-        {/* Volume */}
-        <button className="flex items-center justify-center w-8 h-8 rounded hover:bg-black/5 transition-colors">
-          <svg className="w-3.5 h-3.5 text-gray-500" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.5v7a4.47 4.47 0 002.5-3.5zM14 3.23v2.06a7 7 0 010 13.42v2.06A9 9 0 0014 3.23z" />
-          </svg>
-        </button>
+        {/* Volume + Slider */}
+        <div className="relative">
+          <button
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={() => setIsVolumeSliderOpen((prev) => !prev)}
+            className={`flex items-center justify-center w-8 h-8 rounded transition-colors ${isVolumeSliderOpen ? 'bg-black/10' : 'hover:bg-black/5'}`}
+            title="音量"
+          >
+            <svg className="w-3.5 h-3.5 text-gray-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.5v7a4.47 4.47 0 002.5-3.5zM14 3.23v2.06a7 7 0 010 13.42v2.06A9 9 0 0014 3.23z" />
+            </svg>
+          </button>
+
+          {/* Volume Slider Popup */}
+          <AnimatePresence>
+            {isVolumeSliderOpen && (
+              <motion.div
+                ref={volumeSliderRef}
+                className="absolute bottom-full left-1/2 mb-1 z-50 rounded-md shadow-lg border border-gray-300 overflow-hidden"
+                style={{
+                  marginLeft: '-20px',
+                  width: '40px',
+                  background: 'rgba(240, 240, 245, 0.95)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                }}
+                initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              >
+                <div className="flex flex-col items-center py-2 gap-1">
+                  <svg className="w-3.5 h-3.5 text-gray-500" viewBox="0 0 24 24" fill="currentColor">
+                    {volume === 0 ? (
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm18.29 3.29L19 12.59l-2.29-2.3-1.42 1.42L17.59 14l-2.3 2.29 1.42 1.42L19 15.41l2.29 2.3 1.42-1.42L20.41 14l2.3-2.29-1.42-1.42z" />
+                    ) : volume < 50 ? (
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.5v7a4.47 4.47 0 002.5-3.5z" />
+                    ) : (
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.5v7a4.47 4.47 0 002.5-3.5zM14 3.23v2.06a7 7 0 010 13.42v2.06A9 9 0 0014 3.23z" />
+                    )}
+                  </svg>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={volume}
+                    onChange={(e) => setVolume(Number(e.target.value))}
+                    className="cursor-pointer"
+                    style={{
+                      width: '24px',
+                      height: '80px',
+                      writingMode: 'vertical-lr' as any,
+                      WebkitAppearance: 'slider-vertical' as any,
+                    }}
+                  />
+                  <span className="text-[10px] text-gray-600 font-medium">{volume}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Clock */}
         <button className="flex flex-col items-center justify-center px-2 h-8 rounded hover:bg-black/5 transition-colors text-gray-700 text-xs leading-tight">
