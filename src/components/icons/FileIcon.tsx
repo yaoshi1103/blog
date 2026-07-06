@@ -20,16 +20,16 @@ export const FolderIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-// Trash icon
+// Trash icon - simple recycle bin (24x24 viewBox)
 export const TrashIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <rect x="12" y="14" width="24" height="24" rx="2" fill="#ddd" stroke="#999" strokeWidth="1.5" />
-    <rect x="10" y="10" width="28" height="6" rx="2" fill="#bbb" stroke="#999" strokeWidth="1.5" />
-    <rect x="20" y="8" width="8" height="4" rx="1" fill="#bbb" stroke="#999" strokeWidth="1" />
-    <line x1="18" y1="20" x2="18" y2="34" stroke="#999" strokeWidth="1.5" />
-    <line x1="22" y1="20" x2="22" y2="34" stroke="#999" strokeWidth="1.5" />
-    <line x1="26" y1="20" x2="26" y2="34" stroke="#999" strokeWidth="1.5" />
-    <line x1="30" y1="20" x2="30" y2="34" stroke="#999" strokeWidth="1.5" />
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <rect x="6" y="7" width="12" height="13" rx="1" fill="#ddd" stroke="#999" strokeWidth="0.8" />
+    <rect x="5" y="5" width="14" height="3" rx="1" fill="#bbb" stroke="#999" strokeWidth="0.8" />
+    <rect x="10" y="3.5" width="4" height="2" rx="0.5" fill="#bbb" stroke="#999" strokeWidth="0.6" />
+    <line x1="9" y1="10" x2="9" y2="17" stroke="#999" strokeWidth="0.8" />
+    <line x1="11" y1="10" x2="11" y2="17" stroke="#999" strokeWidth="0.8" />
+    <line x1="13" y1="10" x2="13" y2="17" stroke="#999" strokeWidth="0.8" />
+    <line x1="15" y1="10" x2="15" y2="17" stroke="#999" strokeWidth="0.8" />
   </svg>
 );
 

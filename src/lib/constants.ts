@@ -20,7 +20,7 @@ export const rightIcons: DesktopIconData[] = [
   { id: 'why', label: 'GitHub', column: 'right', href: 'https://github.com/yaoshi1103', isExternal: true },
   { id: 'changelog', label: 'Bilibili', column: 'right', href: 'https://space.bilibili.com/50003864?spm_id_from=333.1007.0.0', isExternal: true },
   { id: 'handbook', label: '此电脑', column: 'right' },
-  { id: 'trash', label: 'Trash', column: 'right' },
+  { id: 'trash', label: '回收站', column: 'right' },
 ];
 
 export const menuLinks = [
