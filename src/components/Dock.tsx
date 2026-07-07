@@ -349,7 +349,9 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
                     style={{
                       width: '24px',
                       height: '80px',
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       writingMode: 'vertical-lr' as any,
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       WebkitAppearance: 'slider-vertical' as any,
                       transform: 'rotate(180deg)',
                     }}
