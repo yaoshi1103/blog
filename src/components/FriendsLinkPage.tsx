@@ -71,9 +71,10 @@ function FriendCard({ friend, index }: { friend: FriendLink; index: number }) {
 export default function FriendsLinkPage() {
   return (
     <div
-      className="friends-scroll h-full overflow-y-auto p-3"
+      className="friends-scroll h-full overflow-y-auto"
       style={{
         background: 'linear-gradient(160deg, #e3f6e9 0%, #d0ebd8 50%, #c3e0cb 100%)',
+        padding: '12px 0',
       }}
     >
       <div
@@ -83,6 +84,7 @@ export default function FriendsLinkPage() {
           width: '100%',
           maxWidth: '1100px',
           gap: 'clamp(10px, 1.3cqw, 22px)',
+          padding: 'clamp(10px, 1.3cqw, 22px)',
         }}
       >
         {friendsData.map((friend, index) => (
