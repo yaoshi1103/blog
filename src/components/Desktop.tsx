@@ -186,7 +186,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
                     height: '600px',
                     ...(windowPositions[windowId]
                       ? { left: `${windowPositions[windowId].x}px`, top: `${windowPositions[windowId].y}px`, marginLeft: 0, marginTop: 0 }
-                      : { left: '50%', top: '50%', marginLeft: '-350px', marginTop: '-300px' }),
+                      : { left: '50%', top: 'calc(50% - 18px)', marginLeft: '-350px', marginTop: '-300px' }),
                   }
             }
             initial={{ scale: 0.8, opacity: 0 }}
