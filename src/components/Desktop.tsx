@@ -39,6 +39,11 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
     setOpenWindows((prev) => prev.filter((w) => w !== id));
     setMinimizedWindows((prev) => prev.filter((w) => w !== id));
     setMaximizedWindows((prev) => prev.filter((w) => w !== id));
+    setWindowPositions((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   }, []);
 
   const minimizeWindow = useCallback((id: string) => {
