@@ -24,6 +24,9 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
   const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
   const [volume, setVolume] = useState(50);
   const volumeSliderRef = useRef<HTMLDivElement>(null);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [calendarMonth, setCalendarMonth] = useState(() => new Date());
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const searchResults = searchQuery
     ? leftIcons.filter(icon => icon.label.includes(searchQuery))
@@ -71,6 +74,23 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
       document.removeEventListener('mousedown', handleClick);
     };
   }, [isVolumeSliderOpen]);
+
+  // 日历面板：点击外部关闭
+  useEffect(() => {
+    if (!isCalendarOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+        setIsCalendarOpen(false);
+      }
+    };
+    const timer = setTimeout(() => {
+      document.addEventListener('mousedown', handleClick);
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, [isCalendarOpen]);
 
   const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
   const dateStr = now.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
@@ -363,11 +383,127 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
           </AnimatePresence>
         </div>
 
-        {/* Clock */}
-        <button title="时间" className="flex flex-col items-center justify-center px-2 h-8 rounded hover:bg-black/5 transition-colors text-gray-700 text-xs leading-tight">
-          <span>{timeStr}</span>
-          <span className="text-[10px] text-gray-400">{dateStr}</span>
-        </button>
+        {/* Clock + Calendar */}
+        <div className="relative">
+          <button
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={() => setIsCalendarOpen((prev) => !prev)}
+            title="时间"
+            className={`flex flex-col items-center justify-center px-2 h-8 rounded transition-colors text-gray-700 text-xs leading-tight ${isCalendarOpen ? 'bg-black/10' : 'hover:bg-black/5'}`}
+          >
+            <span>{timeStr}</span>
+            <span className="text-[10px] text-gray-400">{dateStr}</span>
+          </button>
+
+          {/* Calendar Popup */}
+          <AnimatePresence>
+            {isCalendarOpen && (
+              <motion.div
+                ref={calendarRef}
+                className="absolute bottom-full right-0 mb-1 z-50 rounded-md shadow-lg border border-gray-300 overflow-hidden"
+                style={{
+                  width: '280px',
+                  background: 'rgba(240, 240, 245, 0.95)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                }}
+                initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              >
+                {(() => {
+                  const fullTime = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                  const fullDate = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+                  const year = calendarMonth.getFullYear();
+                  const month = calendarMonth.getMonth();
+                  const firstDay = new Date(year, month, 1);
+                  const lastDay = new Date(year, month + 1, 0);
+                  const daysInMonth = lastDay.getDate();
+                  const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+                  // Monday = 0
+                  let firstDayOfWeek = firstDay.getDay() - 1;
+                  if (firstDayOfWeek < 0) firstDayOfWeek = 6;
+
+                  const today = new Date();
+                  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+                  const weeks = ['一', '二', '三', '四', '五', '六', '日'];
+                  const cells: { day: number; isCurrent: boolean }[] = [];
+                  for (let i = 0; i < firstDayOfWeek; i++) {
+                    cells.push({ day: prevMonthLastDay - firstDayOfWeek + i + 1, isCurrent: false });
+                  }
+                  for (let d = 1; d <= daysInMonth; d++) {
+                    cells.push({ day: d, isCurrent: true });
+                  }
+                  while (cells.length < 42) {
+                    cells.push({ day: cells.length - daysInMonth - firstDayOfWeek + 1, isCurrent: false });
+                  }
+
+                  return (
+                    <div className="p-3">
+                      {/* 大时钟 */}
+                      <div className="text-center pb-2 mb-2 border-b border-gray-300/50">
+                        <div className="text-2xl font-bold text-gray-800">{fullTime}</div>
+                        <div className="text-xs text-gray-500 mt-0.5">{fullDate}</div>
+                      </div>
+                      {/* 月份导航 */}
+                      <div className="flex items-center justify-between mb-2">
+                        <button
+                          onClick={() => setCalendarMonth(new Date(year, month - 1, 1))}
+                          className="w-6 h-6 rounded hover:bg-black/10 flex items-center justify-center transition-colors"
+                        >
+                          <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <span className="text-xs font-medium text-gray-700">
+                          {year}年{month + 1}月
+                        </span>
+                        <button
+                          onClick={() => setCalendarMonth(new Date(year, month + 1, 1))}
+                          className="w-6 h-6 rounded hover:bg-black/10 flex items-center justify-center transition-colors"
+                        >
+                          <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                      {/* 星期标签 */}
+                      <div className="grid grid-cols-7 gap-0.5 mb-1">
+                        {weeks.map(w => (
+                          <div key={w} className="text-center text-[10px] text-gray-400 font-medium">{w}</div>
+                        ))}
+                      </div>
+                      {/* 日期网格 */}
+                      <div className="grid grid-cols-7 gap-0.5">
+                        {cells.map((cell, i) => {
+                          const isToday = isCurrentMonth && cell.isCurrent && cell.day === today.getDate();
+                          return (
+                            <div
+                              key={i}
+                              className={`flex items-center justify-center h-7 rounded text-[11px] transition-colors ${
+                                isToday
+                                  ? 'bg-blue-500 text-white font-bold'
+                                  : cell.isCurrent
+                                  ? 'text-gray-700 hover:bg-blue-100 cursor-default'
+                                  : 'text-gray-300'
+                              }`}
+                            >
+                              {cell.day}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Show desktop */}
         <button className="w-1.5 h-8 hover:bg-black/5 transition-colors rounded-r-sm" />
