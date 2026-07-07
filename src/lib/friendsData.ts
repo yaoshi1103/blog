@@ -6,15 +6,7 @@ export interface FriendLink {
 }
 
 export const friendsData: FriendLink[] = [
-  { id: 1, name: 'Ivyneko', url: 'https://ivyovo-wiki.tech', description: '莫西莫西，欢迎issue/email me添加友链 (=^.^=)' },
-  { id: 2, name: 'Anthony Fu', url: 'https://antfu.me/', description: 'vue core team，神做事就像喝水一样轻松' },
-  { id: 3, name: 'Innei 静かな森', url: 'https://innei.in/', description: '支持高产博主喵' },
-  { id: 4, name: "Cassie Evans's Blog", url: 'https://www.cassie.codes/', description: 'GASP 和 SVG 动画的厉害姐姐🌈' },
-  { id: 5, name: '猫鱼周刊', url: 'https://ameow.xyz/', description: '猫鱼周刊，快乐划水 (.-v-)' },
-  { id: 6, name: '十玖八柒', url: 'https://blog.ahzoo.cn/', description: '后端 | Z次元ovo' },
-  { id: 7, name: 'Kuro', url: 'https://www.elainafan.one/', description: '好想像kuro一样会算法啊' },
-  { id: 8, name: 'loveapple', url: 'https://loveapple.eu/', description: 'RF Engineering | 一条喜欢苹果的水煮鱼🎣' },
-  { id: 9, name: 'Jerry Yang', url: 'https://jerryyang.github.io/', description: 'Rust | All in' },
+  { id: 1, name: 'Topaz', url: 'https://blog-topaz.pages.dev/', description: 'hello！欢迎找我添加友链' },
 ];
 
 const avatarGradients: string[] = [
