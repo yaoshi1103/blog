@@ -22,47 +22,57 @@ function FriendCard({ friend, index }: { friend: FriendLink; index: number }) {
       transition={{ duration: 0.35, delay: index * 0.06, ease: 'easeOut' }}
       whileHover={{ scale: 1.03, transition: { duration: 0.15 } }}
       onClick={handleClick}
-      className="bg-white/70 backdrop-blur-sm rounded-xl shadow-sm border border-white/40 cursor-pointer hover:bg-white/85 hover:shadow-md transition-colors"
+      className="bg-white rounded-2xl border border-gray-100 cursor-pointer hover:border-[#0078d4]/30 hover:shadow-md transition-colors"
       style={{
-        padding: 'clamp(10px, 1.6cqw, 22px)',
+        padding: 'clamp(14px, 2cqw, 24px)',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
       }}
     >
-      <div className="flex" style={{ gap: 'clamp(8px, 1.1cqw, 16px)' }}>
+      <div className="flex flex-col items-center text-center" style={{ gap: 'clamp(8px, 1.1cqw, 14px)' }}>
+        {/* 圆形头像 */}
         <div
-          className="rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 shadow-sm"
+          className="rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
           style={{
             background: getAvatarGradient(friend.name),
-            width: 'clamp(30px, 4.2cqw, 60px)',
-            height: 'clamp(30px, 4.2cqw, 60px)',
-            fontSize: 'clamp(13px, 2.1cqw, 28px)',
+            width: 'clamp(48px, 7cqw, 72px)',
+            height: 'clamp(48px, 7cqw, 72px)',
+            fontSize: 'clamp(18px, 2.6cqw, 28px)',
+            border: '2px solid #fff',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           }}
         >
           {getAvatarInitial(friend.name)}
         </div>
-        <div className="flex-1 min-w-0">
-          <h3
-            className="font-bold text-gray-800 truncate leading-tight"
-            style={{ fontSize: 'clamp(12px, 1.85cqw, 19px)' }}
-          >
-            {friend.name}
-          </h3>
-          <p
-            className="text-gray-400 truncate leading-tight"
-            style={{ fontSize: 'clamp(10px, 1.35cqw, 14px)', marginTop: '2px' }}
-          >
-            {getDisplayUrl(friend.url)}
-          </p>
-          <p
-            className="text-gray-500 leading-snug"
-            style={{
-              fontSize: 'clamp(10px, 1.35cqw, 14px)',
-              marginTop: 'clamp(4px, 0.7cqw, 10px)',
-            }}
-            title={friend.description}
-          >
-            {friend.description}
-          </p>
-        </div>
+        {/* 名称 */}
+        <h3
+          className="font-semibold text-gray-800 truncate leading-tight"
+          style={{ fontSize: 'clamp(14px, 2cqw, 18px)' }}
+        >
+          {friend.name}
+        </h3>
+        {/* 网址 */}
+        <p
+          className="text-[#0078d4] truncate leading-tight"
+          style={{ fontSize: 'clamp(11px, 1.5cqw, 13px)' }}
+        >
+          {getDisplayUrl(friend.url)}
+        </p>
+        {/* 分隔线 */}
+        <div
+          style={{
+            width: 'clamp(28px, 4cqw, 40px)',
+            height: '1.5px',
+            background: 'linear-gradient(90deg, transparent, #0078d4, transparent)',
+          }}
+        />
+        {/* 描述 */}
+        <p
+          className="text-gray-500 leading-snug"
+          style={{ fontSize: 'clamp(11px, 1.5cqw, 14px)' }}
+          title={friend.description}
+        >
+          {friend.description}
+        </p>
       </div>
     </motion.div>
   );
@@ -71,31 +81,48 @@ function FriendCard({ friend, index }: { friend: FriendLink; index: number }) {
 export default function FriendsLinkPage() {
   return (
     <div
-      className="friends-scroll h-full overflow-y-auto"
-      style={{
-        background: 'radial-gradient(at 40% 20%, #1E90FF 0px, transparent 50%), radial-gradient(at 80% 50%, #00BFFF 0px, transparent 50%), radial-gradient(at 20% 80%, #1E90FF 0px, transparent 50%), radial-gradient(at 60% 100%, #00BFFF 0px, transparent 50%), linear-gradient(135deg, #0a3d6b, #1e5c8a)',
-        padding: '12px 0',
-      }}
+      className="h-full w-full flex flex-col items-center overflow-y-auto"
+      style={{ background: '#fbfbfb' }}
     >
-      <div style={{ textAlign: 'center', marginBottom: '20px', paddingTop: '12px' }}>
-        <h2 style={{ color: 'white', fontSize: 'clamp(18px, 2.5cqw, 26px)', fontWeight: 700, letterSpacing: '0.08em' }}>
+      <div className="flex-1 flex flex-col items-center w-full px-8 pt-10 pb-6" style={{ containerType: 'inline-size' }}>
+        {/* 标题 */}
+        <h2
+          className="font-semibold text-gray-800"
+          style={{ fontSize: 'clamp(20px, 3.4cqw, 28px)' }}
+        >
           友链
         </h2>
-        <div style={{ width: '36px', height: '3px', background: '#1E90FF', margin: '8px auto 0', borderRadius: '2px' }} />
+
+        {/* 分隔线 */}
+        <div
+          className="mt-3 mb-8"
+          style={{
+            width: 'clamp(60px, 10cqw, 90px)',
+            height: '2px',
+            background: 'linear-gradient(90deg, transparent, #0078d4, transparent)',
+          }}
+        />
+
+        {/* 卡片网格 */}
+        <div
+          className="grid grid-cols-3 w-full mx-auto"
+          style={{
+            gap: 'clamp(12px, 1.8cqw, 24px)',
+            maxWidth: '900px',
+          }}
+        >
+          {friendsData.map((friend, index) => (
+            <FriendCard key={friend.id} friend={friend} index={index} />
+          ))}
+        </div>
       </div>
+
+      {/* 底部签名 */}
       <div
-        className="grid grid-cols-3 mx-auto"
-        style={{
-          containerType: 'inline-size',
-          width: '100%',
-          maxWidth: '1100px',
-          gap: 'clamp(10px, 1.3cqw, 22px)',
-          padding: 'clamp(10px, 1.3cqw, 22px)',
-        }}
+        className="w-full text-center py-3 text-gray-400 flex-shrink-0"
+        style={{ fontSize: 'clamp(10px, 1.4cqw, 12px)' }}
       >
-        {friendsData.map((friend, index) => (
-          <FriendCard key={friend.id} friend={friend} index={index} />
-        ))}
+        © 2026 Topaz · 我的互联网朋友们
       </div>
     </div>
   );
