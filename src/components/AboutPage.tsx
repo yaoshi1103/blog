@@ -4,9 +4,9 @@ import React from 'react';
 
 /* 个人介绍数据 */
 const introLines: string[] = [
-  '研0 · 控制工程与机器视觉',
-  'INFJ · 热爱技术与设计',
-  '南方城市 · 追求工作生活平衡',
+  '福建工科研究生在读',
+  'INFJ · 喜欢 vibe coding',
+  '正在学习 AI Agent 开发',
 ];
 
 export default function AboutPage() {
