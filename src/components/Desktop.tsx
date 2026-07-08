@@ -6,6 +6,8 @@ import DesktopIcon from './DesktopIcon';
 import Dock from './Dock'; // Windows-style taskbar
 import FriendsLinkPage from './FriendsLinkPage';
 import EmailPage from './EmailPage';
+import ThisPCPage from './ThisPCPage';
+import { iconMap } from './DesktopIcon';
 import { leftIcons, rightIcons } from '@/lib/constants';
 
 const allIcons = [...leftIcons, ...rightIcons];
@@ -207,7 +209,14 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
             >
               {/* Left: icon + title */}
               <div className="flex items-center gap-2 px-1 min-w-0">
-                <div className="w-3.5 h-3.5 bg-blue-500 rounded-sm flex-shrink-0" />
+                {(() => {
+                  const TitleIcon = iconMap[windowId];
+                  return TitleIcon ? (
+                    <TitleIcon className="w-3.5 h-3.5 flex-shrink-0" />
+                  ) : (
+                    <div className="w-3.5 h-3.5 bg-blue-500 rounded-sm flex-shrink-0" />
+                  );
+                })()}
                 <span className="text-xs font-medium text-gray-700 truncate">
                   {getIconLabel(windowId)}
                 </span>
@@ -258,6 +267,8 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
                 <FriendsLinkPage />
               ) : windowId === 'email' ? (
                 <EmailPage />
+              ) : windowId === 'handbook' ? (
+                <ThisPCPage />
               ) : (
                 <div className="h-full overflow-y-auto p-4 text-sm text-gray-500">
                   <p>This is a placeholder for the <strong>{getIconLabel(windowId)}</strong> page.</p>

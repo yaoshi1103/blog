@@ -246,3 +246,55 @@ export const FriendLinkC: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     <line x1="26" y1="33" x2="36" y2="33" stroke="#4a90d9" strokeWidth="1.4" />
   </svg>
 );
+
+// Windows 11 style local disk drive icon (C:, D:)
+// Gray drive enclosure with blue accent stripe on top
+export const DriveIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    {/* Drive body - gray enclosure */}
+    <rect x="6" y="12" width="36" height="26" rx="3" fill="#c8d0d8" stroke="#8a949e" strokeWidth="1.3" />
+    {/* Top blue accent stripe */}
+    <path d="M6 15 Q6 12 9 12 H39 Q42 12 42 15 V16 H6 Z" fill="#3b8ced" />
+    {/* Front face divider */}
+    <rect x="6" y="20" width="36" height="0.8" fill="#8a949e" opacity="0.5" />
+    {/* Drive bay lines */}
+    <rect x="10" y="24" width="22" height="2" rx="0.5" fill="#9aa4ae" opacity="0.7" />
+    <rect x="10" y="28" width="16" height="1.5" rx="0.5" fill="#9aa4ae" opacity="0.5" />
+    {/* Activity LED */}
+    <circle cx="36" cy="32" r="1.1" fill="#5ade80" />
+  </svg>
+);
+
+// Windows style optical disc drive icon (DVD/CD - E:)
+export const OpticalDriveIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    {/* Drive body */}
+    <rect x="6" y="12" width="36" height="26" rx="3" fill="#d8d8dc" stroke="#8a8e94" strokeWidth="1.3" />
+    {/* Top stripe */}
+    <path d="M6 15 Q6 12 9 12 H39 Q42 12 42 15 V16 H6 Z" fill="#6b7078" />
+    {/* Disc peeking out of tray */}
+    <ellipse cx="24" cy="30" rx="13" ry="3.5" fill="#cfcfcf" stroke="#8a8e94" strokeWidth="0.8" />
+    <ellipse cx="24" cy="30" rx="13" ry="3.5" fill="url(#discGrad)" opacity="0.7" />
+    <ellipse cx="24" cy="30" rx="3" ry="1" fill="#e8e8ec" stroke="#8a8e94" strokeWidth="0.5" />
+    <defs>
+      <linearGradient id="discGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#7bb8e8" />
+        <stop offset="0.5" stopColor="#b8a8e0" />
+        <stop offset="1" stopColor="#7bb8e8" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+// Windows 11 style user folder icon (yellow folder, slightly different from blue FolderIcon)
+// Used in This PC > Folders section (Desktop, Documents, Downloads, etc.)
+export const UserFolderIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    {/* Back tab */}
+    <path d="M6 13 Q6 10.5 8.5 10.5 H18 L21.5 14 H39.5 Q42 14 42 16.5 V18 H6 Z" fill="#f6c945" stroke="#c99a1f" strokeWidth="1" />
+    {/* Main body */}
+    <path d="M6 16 Q6 14 8.5 14 H39.5 Q42 14 42 16.5 V35 Q42 37.5 39.5 37.5 H8.5 Q6 37.5 6 35 Z" fill="#ffd96b" stroke="#c99a1f" strokeWidth="1.2" />
+    {/* Front flap highlight */}
+    <path d="M6 16 Q6 14 8.5 14 H39.5 Q42 14 42 16.5 V19 H6 Z" fill="#ffe48a" />
+  </svg>
+);

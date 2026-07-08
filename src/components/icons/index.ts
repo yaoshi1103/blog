@@ -19,4 +19,7 @@ export {
   GitHubIcon,
   PostHogLogo,
   ArticleIcon,
+  DriveIcon,
+  OpticalDriveIcon,
+  UserFolderIcon,
 } from './FileIcon';
