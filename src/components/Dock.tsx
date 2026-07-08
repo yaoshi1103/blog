@@ -432,13 +432,15 @@ export default function Taskbar({ openWindows, minimizedWindows, onTaskbarClick,
                         onMouseDown={(e) => e.stopPropagation()}
                         className={`flex items-center gap-2.5 px-1.5 py-1.5 rounded cursor-default ${wifiOn ? 'hover:bg-black/5' : 'opacity-40 cursor-not-allowed'}`}
                       >
-                        <svg className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                          {/* strength 3: 三条弧线全显示；2: 删最外层；1: 只剩最内层 */}
-                          {net.strength >= 3 && <path d="M 3.5 12.1 A 10 10 0 0 1 20.5 12.1" />}
-                          {net.strength >= 2 && <path d="M 6 13.6 A 7 7 0 0 1 18 13.6" />}
-                          {net.strength >= 1 && <path d="M 8.5 15.1 A 4 4 0 0 1 15.5 15.1" />}
-                          {net.strength >= 1 && <circle cx="12" cy="17.1" r="1.5" fill="currentColor" stroke="none" />}
-                        </svg>
+                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 flex-shrink-0">
+                          <svg className="w-3.5 h-3.5 text-gray-600" viewBox="2 9 20 11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" preserveAspectRatio="xMidYMid meet">
+                            {/* strength 3: 三条弧线全显示；2: 删最外层；1: 只剩最内层 */}
+                            {net.strength >= 3 && <path d="M 3.5 12.1 A 10 10 0 0 1 20.5 12.1" />}
+                            {net.strength >= 2 && <path d="M 6 13.6 A 7 7 0 0 1 18 13.6" />}
+                            {net.strength >= 1 && <path d="M 8.5 15.1 A 4 4 0 0 1 15.5 15.1" />}
+                            {net.strength >= 1 && <circle cx="12" cy="17.1" r="1.5" fill="currentColor" stroke="none" />}
+                          </svg>
+                        </span>
                         <span className="text-[11.5px] text-gray-700 truncate flex-1">{net.name}</span>
                         {net.connected && <span className="text-[10px] text-[#0078d4] flex-shrink-0">已连接</span>}
                       </div>
