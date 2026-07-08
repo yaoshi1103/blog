@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DriveIcon, OpticalDriveIcon, UserFolderIcon } from './icons';
+import { DriveIcon, OpticalDriveIcon, UserFolderIcon, ArticleIcon } from './icons';
 
 /* ---------- Inline SVG icons (Windows 11 File Explorer toolbar / sidebar) ---------- */
 
@@ -248,6 +248,49 @@ export default function ThisPCPage() {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [thisPCExpanded, setThisPCExpanded] = useState(true);
 
+  // Navigation: root (此电脑) -> drive (C:/D:) -> file (彩蛋.txt)
+  type Location = { type: 'root' } | { type: 'drive'; letter: string } | { type: 'file'; letter: string; name: string };
+  const [location, setLocation] = useState<Location>({ type: 'root' });
+
+  const isRoot = location.type === 'root';
+  const driveName = (letter: string) => {
+    const d = drives.find((x) => x.letter === letter);
+    return d ? `${d.name} (${letter})` : letter;
+  };
+  const goUp = () => {
+    if (location.type === 'file') {
+      setLocation({ type: 'drive', letter: location.letter });
+      setSelectedItem(null);
+    } else if (location.type === 'drive') {
+      setLocation({ type: 'root' });
+      setSelectedItem(null);
+    }
+  };
+  const enterDrive = (letter: string) => {
+    setLocation({ type: 'drive', letter });
+    setSelectedItem(null);
+  };
+  const openFile = (letter: string, name: string) => {
+    setLocation({ type: 'file', letter, name });
+    setSelectedItem(null);
+  };
+  const goRoot = () => {
+    setLocation({ type: 'root' });
+    setSelectedItem(null);
+  };
+
+  const isActive = (id: string) => {
+    if (location.type === 'root' && id === 'this-pc') return true;
+    if ((location.type === 'drive' || location.type === 'file') && id === `drive-${location.letter.charAt(0).toLowerCase()}`) return true;
+    return selectedNav === id;
+  };
+  const handleNav = (id: string) => {
+    setSelectedNav(id);
+    if (id === 'this-pc') goRoot();
+    else if (id === 'drive-c') enterDrive('C:');
+    else if (id === 'drive-d') enterDrive('D:');
+  };
+
   return (
     <div className="h-full flex flex-col" style={{ background: '#fbfbfb' }}>
       {/* ===== Command bar (Windows 11 style) ===== */}
@@ -289,17 +332,37 @@ export default function ThisPCPage() {
 
       {/* ===== Address / breadcrumb bar ===== */}
       <div className="flex items-center h-9 px-2 gap-1 border-b border-[#e5e5e5] flex-shrink-0" style={{ background: '#fbfbfb' }}>
-        <CommandButton icon={IconBack} label="后退" disabled />
+        <CommandButton icon={IconBack} label="后退" disabled={isRoot} onClick={goUp} />
         <CommandButton icon={IconForward} label="前进" disabled />
-        <CommandButton icon={IconUp} label="向上" disabled />
+        <CommandButton icon={IconUp} label="向上" disabled={isRoot} onClick={goUp} />
         <CommandButton icon={IconRefresh} label="刷新" />
-        <div className="flex items-center h-7 flex-1 ml-1 px-2 rounded-md border border-[#d0d0d0] bg-white text-[12px] text-gray-700 max-w-[420px]">
-          <IconThisPCMini className="w-4 h-4 mr-1.5 text-gray-600" />
-          <span>此电脑</span>
-          <IconChevron className="w-3 h-3 mx-1 text-gray-400" />
-          <span className="text-gray-500">Windows (C:)</span>
+        <div className="flex items-center h-7 flex-1 ml-1 px-2 rounded-md border border-[#d0d0d0] bg-white text-[12px] text-gray-700 max-w-[440px] min-w-0">
+          <IconThisPCMini className="w-4 h-4 mr-1.5 text-gray-600 flex-shrink-0" />
+          <span
+            className={`truncate ${isRoot ? 'text-gray-700' : 'text-blue-600 hover:underline cursor-pointer'}`}
+            onClick={() => !isRoot && goRoot()}
+          >
+            此电脑
+          </span>
+          {location.type !== 'root' && (
+            <>
+              <IconChevron className="w-3 h-3 mx-1 text-gray-400 flex-shrink-0" />
+              <span
+                className={`truncate ${location.type === 'drive' ? 'text-gray-700' : 'text-blue-600 hover:underline cursor-pointer'}`}
+                onClick={() => location.type === 'file' && enterDrive(location.letter)}
+              >
+                {driveName(location.letter)}
+              </span>
+            </>
+          )}
+          {location.type === 'file' && (
+            <>
+              <IconChevron className="w-3 h-3 mx-1 text-gray-400 flex-shrink-0" />
+              <span className="truncate text-gray-700">{location.name}</span>
+            </>
+          )}
         </div>
-        <div className="flex items-center h-7 px-2 ml-auto rounded-md border border-[#d0d0d0] bg-white w-[150px]">
+        <div className="flex items-center h-7 px-2 ml-auto rounded-md border border-[#d0d0d0] bg-white w-[150px] flex-shrink-0">
           <IconSearch className="w-3.5 h-3.5 text-gray-500 mr-1.5" />
           <input
             type="text"
@@ -316,15 +379,15 @@ export default function ThisPCPage() {
           className="w-[180px] flex-shrink-0 overflow-y-auto py-1.5 px-1.5 border-r border-[#e5e5e5]"
           style={{ background: '#fafafa' }}
         >
-          <NavItem icon={IconStar} label="快速访问" depth={0} hasChevron expanded onClick={() => setSelectedNav('quick')} active={selectedNav === 'quick'} />
-          <NavItem icon={IconDesktop} label="桌面" depth={1} onClick={() => setSelectedNav('desktop')} active={selectedNav === 'desktop'} />
-          <NavItem icon={IconDownload} label="下载" depth={1} onClick={() => setSelectedNav('downloads')} active={selectedNav === 'downloads'} />
-          <NavItem icon={IconDoc} label="文档" depth={1} onClick={() => setSelectedNav('documents')} active={selectedNav === 'documents'} />
-          <NavItem icon={IconPicture} label="图片" depth={1} onClick={() => setSelectedNav('pictures')} active={selectedNav === 'pictures'} />
+          <NavItem icon={IconStar} label="快速访问" depth={0} hasChevron expanded onClick={() => handleNav('quick')} active={isActive('quick')} />
+          <NavItem icon={IconDesktop} label="桌面" depth={1} onClick={() => handleNav('desktop')} active={isActive('desktop')} />
+          <NavItem icon={IconDownload} label="下载" depth={1} onClick={() => handleNav('downloads')} active={isActive('downloads')} />
+          <NavItem icon={IconDoc} label="文档" depth={1} onClick={() => handleNav('documents')} active={isActive('documents')} />
+          <NavItem icon={IconPicture} label="图片" depth={1} onClick={() => handleNav('pictures')} active={isActive('pictures')} />
           <div className="h-1.5" />
-          <NavItem icon={IconHome} label="主页" depth={0} onClick={() => setSelectedNav('home')} active={selectedNav === 'home'} />
-          <NavItem icon={IconGallery} label="图库" depth={0} onClick={() => setSelectedNav('gallery')} active={selectedNav === 'gallery'} />
-          <NavItem icon={IconOneDrive} label="OneDrive" depth={0} hasChevron onClick={() => setSelectedNav('onedrive')} active={selectedNav === 'onedrive'} />
+          <NavItem icon={IconHome} label="主页" depth={0} onClick={() => handleNav('home')} active={isActive('home')} />
+          <NavItem icon={IconGallery} label="图库" depth={0} onClick={() => handleNav('gallery')} active={isActive('gallery')} />
+          <NavItem icon={IconOneDrive} label="OneDrive" depth={0} hasChevron onClick={() => handleNav('onedrive')} active={isActive('onedrive')} />
           <div className="h-1.5" />
           <NavItem
             icon={IconThisPCMini}
@@ -332,101 +395,149 @@ export default function ThisPCPage() {
             depth={0}
             hasChevron
             expanded={thisPCExpanded}
-            onClick={() => { setThisPCExpanded((v) => !v); setSelectedNav('this-pc'); }}
-            active={selectedNav === 'this-pc'}
+            onClick={() => { setThisPCExpanded((v) => !v); handleNav('this-pc'); }}
+            active={isActive('this-pc')}
           />
           {thisPCExpanded && (
             <>
-              <NavItem icon={IconDesktop} label="桌面" depth={1} onClick={() => setSelectedNav('pc-desktop')} active={selectedNav === 'pc-desktop'} />
-              <NavItem icon={IconDoc} label="文档" depth={1} onClick={() => setSelectedNav('pc-documents')} active={selectedNav === 'pc-documents'} />
-              <NavItem icon={IconDownload} label="下载" depth={1} onClick={() => setSelectedNav('pc-downloads')} active={selectedNav === 'pc-downloads'} />
-              <NavItem icon={IconMusic} label="音乐" depth={1} onClick={() => setSelectedNav('pc-music')} active={selectedNav === 'pc-music'} />
-              <NavItem icon={IconPicture} label="图片" depth={1} onClick={() => setSelectedNav('pc-pictures')} active={selectedNav === 'pc-pictures'} />
-              <NavItem icon={IconVideo} label="视频" depth={1} onClick={() => setSelectedNav('pc-videos')} active={selectedNav === 'pc-videos'} />
-              <NavItem icon={DriveIcon} label="Windows (C:)" depth={1} onClick={() => setSelectedNav('drive-c')} active={selectedNav === 'drive-c'} />
-              <NavItem icon={DriveIcon} label="新加卷 (D:)" depth={1} onClick={() => setSelectedNav('drive-d')} active={selectedNav === 'drive-d'} />
+              <NavItem icon={IconDesktop} label="桌面" depth={1} onClick={() => handleNav('pc-desktop')} active={isActive('pc-desktop')} />
+              <NavItem icon={IconDoc} label="文档" depth={1} onClick={() => handleNav('pc-documents')} active={isActive('pc-documents')} />
+              <NavItem icon={IconDownload} label="下载" depth={1} onClick={() => handleNav('pc-downloads')} active={isActive('pc-downloads')} />
+              <NavItem icon={IconMusic} label="音乐" depth={1} onClick={() => handleNav('pc-music')} active={isActive('pc-music')} />
+              <NavItem icon={IconPicture} label="图片" depth={1} onClick={() => handleNav('pc-pictures')} active={isActive('pc-pictures')} />
+              <NavItem icon={IconVideo} label="视频" depth={1} onClick={() => handleNav('pc-videos')} active={isActive('pc-videos')} />
+              <NavItem icon={DriveIcon} label="Windows (C:)" depth={1} onClick={() => handleNav('drive-c')} active={isActive('drive-c')} />
+              <NavItem icon={DriveIcon} label="新加卷 (D:)" depth={1} onClick={() => handleNav('drive-d')} active={isActive('drive-d')} />
             </>
           )}
           <div className="h-1.5" />
-          <NavItem icon={IconNetwork} label="网络" depth={0} onClick={() => setSelectedNav('network')} active={selectedNav === 'network'} />
+          <NavItem icon={IconNetwork} label="网络" depth={0} onClick={() => handleNav('network')} active={isActive('network')} />
         </div>
 
         {/* Content area */}
         <div className="flex-1 min-w-0 overflow-y-auto" style={{ background: '#fbfbfb' }}>
-          <div className="p-3">
-            {/* Folders section */}
-            <div className="flex items-center mb-1.5 px-1">
-              <IconChevron className="w-3 h-3 mr-1 text-gray-500 rotate-90" />
-              <span className="text-[13px] font-semibold text-gray-700">文件夹</span>
-            </div>
-            <div className="grid grid-cols-3 gap-1.5 mb-4">
-              {folders.map((f) => (
-                <div
-                  key={f.name}
-                  onClick={() => setSelectedItem(`folder-${f.name}`)}
-                  className={`flex items-center gap-2 px-2 py-2 rounded-md cursor-default transition-colors ${
-                    selectedItem === `folder-${f.name}` ? 'bg-[#cfe8fc]' : 'hover:bg-black/[0.05]'
-                  }`}
-                >
-                  <UserFolderIcon className="w-7 h-7 flex-shrink-0" />
-                  <span className="text-[12.5px] text-gray-800 truncate">{f.name}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Devices and drives section */}
-            <div className="flex items-center mb-1.5 px-1">
-              <IconChevron className="w-3 h-3 mr-1 text-gray-500 rotate-90" />
-              <span className="text-[13px] font-semibold text-gray-700">设备和驱动器</span>
-            </div>
-            <div className="grid grid-cols-2 gap-1.5">
-              {drives.map((d) => {
-                const isOptical = d.type === 'optical';
-                const free = d.total - d.used;
-                const pct = d.total > 0 ? (d.used / d.total) * 100 : 0;
-                const DriveSvg = isOptical ? OpticalDriveIcon : DriveIcon;
-                return (
+          {location.type === 'root' && (
+            <div className="p-3">
+              {/* Folders section */}
+              <div className="flex items-center mb-1.5 px-1">
+                <IconChevron className="w-3 h-3 mr-1 text-gray-500 rotate-90" />
+                <span className="text-[13px] font-semibold text-gray-700">文件夹</span>
+              </div>
+              <div className="grid grid-cols-3 gap-1.5 mb-4">
+                {folders.map((f) => (
                   <div
-                    key={d.letter}
-                    onClick={() => setSelectedItem(`drive-${d.letter}`)}
-                    className={`flex gap-3 px-2.5 py-2.5 rounded-md cursor-default transition-colors ${
-                      selectedItem === `drive-${d.letter}` ? 'bg-[#cfe8fc]' : 'hover:bg-black/[0.05]'
+                    key={f.name}
+                    onClick={() => setSelectedItem(`folder-${f.name}`)}
+                    className={`flex items-center gap-2 px-2 py-2 rounded-md cursor-default transition-colors ${
+                      selectedItem === `folder-${f.name}` ? 'bg-[#cfe8fc]' : 'hover:bg-black/[0.05]'
                     }`}
                   >
-                    <DriveSvg className="w-10 h-10 flex-shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <div className="text-[12.5px] text-gray-800 truncate">
-                        {d.name} ({d.letter})
-                      </div>
-                      {isOptical ? (
-                        <div className="text-[11px] text-gray-500 mt-0.5">CD/DVD 驱动器</div>
-                      ) : (
-                        <>
-                          {/* Capacity bar */}
-                          <div className="mt-1.5 h-2 rounded-full bg-[#e3e3e3] overflow-hidden relative">
-                            <div
-                              className={`h-full rounded-full ${pct > 90 ? 'bg-[#d83b01]' : 'bg-[#0078d4]'}`}
-                              style={{ width: `${Math.max(2, pct)}%` }}
-                            />
-                          </div>
-                          <div className="text-[11px] text-gray-500 mt-1">
-                            {free.toFixed(1)} GB 可用，共 {d.total.toFixed(0)} GB
-                          </div>
-                        </>
-                      )}
-                    </div>
+                    <UserFolderIcon className="w-7 h-7 flex-shrink-0" />
+                    <span className="text-[12.5px] text-gray-800 truncate">{f.name}</span>
                   </div>
-                );
-              })}
+                ))}
+              </div>
+
+              {/* Devices and drives section */}
+              <div className="flex items-center mb-1.5 px-1">
+                <IconChevron className="w-3 h-3 mr-1 text-gray-500 rotate-90" />
+                <span className="text-[13px] font-semibold text-gray-700">设备和驱动器</span>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5">
+                {drives.map((d) => {
+                  const isOptical = d.type === 'optical';
+                  const free = d.total - d.used;
+                  const pct = d.total > 0 ? (d.used / d.total) * 100 : 0;
+                  const DriveSvg = isOptical ? OpticalDriveIcon : DriveIcon;
+                  return (
+                    <div
+                      key={d.letter}
+                      onClick={() => (isOptical ? setSelectedItem(`drive-${d.letter}`) : enterDrive(d.letter))}
+                      onDoubleClick={() => !isOptical && enterDrive(d.letter)}
+                      className={`flex gap-3 px-2.5 py-2.5 rounded-md cursor-default transition-colors ${
+                        selectedItem === `drive-${d.letter}` ? 'bg-[#cfe8fc]' : 'hover:bg-black/[0.05]'
+                      }`}
+                      title={isOptical ? 'CD/DVD 驱动器' : `双击进入 ${driveName(d.letter)}`}
+                    >
+                      <DriveSvg className="w-10 h-10 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[12.5px] text-gray-800 truncate">
+                          {d.name} ({d.letter})
+                        </div>
+                        {isOptical ? (
+                          <div className="text-[11px] text-gray-500 mt-0.5">CD/DVD 驱动器</div>
+                        ) : (
+                          <>
+                            <div className="mt-1.5 h-2 rounded-full bg-[#e3e3e3] overflow-hidden relative">
+                              <div
+                                className={`h-full rounded-full ${pct > 90 ? 'bg-[#d83b01]' : 'bg-[#0078d4]'}`}
+                                style={{ width: `${Math.max(2, pct)}%` }}
+                              />
+                            </div>
+                            <div className="text-[11px] text-gray-500 mt-1">
+                              {free.toFixed(1)} GB 可用，共 {d.total.toFixed(0)} GB
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
+
+          {location.type === 'drive' && (
+            <div className="p-3">
+              <div className="flex items-center mb-1.5 px-1">
+                <IconChevron className="w-3 h-3 mr-1 text-gray-500 rotate-90" />
+                <span className="text-[13px] font-semibold text-gray-700">{driveName(location.letter)}</span>
+              </div>
+              <div className="grid grid-cols-4 gap-1.5">
+                <div
+                  onClick={() => setSelectedItem('egg')}
+                  onDoubleClick={() => openFile(location.letter, '彩蛋.txt')}
+                  className={`flex flex-col items-center gap-1 px-2 py-3 rounded-md cursor-default transition-colors ${
+                    selectedItem === 'egg' ? 'bg-[#cfe8fc]' : 'hover:bg-black/[0.05]'
+                  }`}
+                  title="双击打开 彩蛋.txt"
+                >
+                  <ArticleIcon className="w-11 h-11 flex-shrink-0" />
+                  <span className="text-[12px] text-gray-800 truncate max-w-full">彩蛋.txt</span>
+                </div>
+              </div>
+              <div className="mt-3 px-1 text-[11px] text-gray-400">1 个项目</div>
+            </div>
+          )}
+
+          {location.type === 'file' && (
+            <div
+              className="h-full flex items-center justify-center"
+              style={{ containerType: 'inline-size' }}
+            >
+              <p
+                style={{
+                  color: '#1E90FF',
+                  fontSize: 'clamp(20px, 4.5cqw, 40px)',
+                  fontWeight: 700,
+                  letterSpacing: '0.02em',
+                  textAlign: 'center',
+                  padding: '0 16px',
+                }}
+              >
+                哈哈哈这里什么都没有喔
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* ===== Status bar ===== */}
       <div className="flex items-center h-6 px-3 border-t border-[#e5e5e5] text-[11px] text-gray-500 flex-shrink-0" style={{ background: '#f5f6f7' }}>
-        <span>{drives.length + folders.length} 个项目</span>
-        {selectedItem && <span className="ml-3">| 已选中 1 个项目</span>}
+        {location.type === 'root' && <span>{drives.length + folders.length} 个项目</span>}
+        {location.type === 'drive' && <span>1 个项目</span>}
+        {location.type === 'file' && <span>{location.name}</span>}
+        {selectedItem && location.type !== 'file' && <span className="ml-3">| 已选中 1 个项目</span>}
       </div>
     </div>
   );
