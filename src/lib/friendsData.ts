@@ -3,10 +3,11 @@ export interface FriendLink {
   name: string;
   url: string;
   description: string;
+  avatar?: string;
 }
 
 export const friendsData: FriendLink[] = [
-  { id: 1, name: 'Topaz', url: 'https://blog-topaz.pages.dev/', description: 'hello！欢迎找我添加友链' },
+  { id: 1, name: 'Topaz', url: 'https://blog-topaz.pages.dev/', description: 'hello！欢迎找我添加友链', avatar: '/touxiang.jpg' },
 ];
 
 const avatarGradients: string[] = [

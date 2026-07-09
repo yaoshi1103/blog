@@ -31,9 +31,9 @@ function FriendCard({ friend, index }: { friend: FriendLink; index: number }) {
       <div className="flex flex-col items-center text-center" style={{ gap: 'clamp(8px, 1.1cqw, 14px)' }}>
         {/* 圆形头像 */}
         <div
-          className="rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
+          className="rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 overflow-hidden"
           style={{
-            background: getAvatarGradient(friend.name),
+            background: friend.avatar ? 'transparent' : getAvatarGradient(friend.name),
             width: 'clamp(48px, 7cqw, 72px)',
             height: 'clamp(48px, 7cqw, 72px)',
             fontSize: 'clamp(18px, 2.6cqw, 28px)',
@@ -41,7 +41,12 @@ function FriendCard({ friend, index }: { friend: FriendLink; index: number }) {
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           }}
         >
-          {getAvatarInitial(friend.name)}
+          {friend.avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={friend.avatar} alt={friend.name} className="w-full h-full object-cover" draggable={false} />
+          ) : (
+            getAvatarInitial(friend.name)
+          )}
         </div>
         {/* 名称 */}
         <h3

@@ -20,8 +20,8 @@ export default function AboutPage() {
         <div
           className="rounded-full overflow-hidden flex-shrink-0"
           style={{
-            width: 'clamp(120px, 22cqw, 180px)',
-            height: 'clamp(120px, 22cqw, 180px)',
+            width: 'clamp(140px, 26cqw, 210px)',
+            height: 'clamp(140px, 26cqw, 210px)',
             border: '3px solid #fff',
             boxShadow: '0 4px 16px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)',
           }}
@@ -38,7 +38,7 @@ export default function AboutPage() {
         {/* 姓名 */}
         <h1
           className="font-semibold text-gray-800 mt-6"
-          style={{ fontSize: 'clamp(20px, 3.4cqw, 28px)' }}
+          style={{ fontSize: 'clamp(24px, 4cqw, 32px)' }}
         >
           Topaz
         </h1>
@@ -59,7 +59,7 @@ export default function AboutPage() {
             <p
               key={i}
               className="text-gray-600 text-center"
-              style={{ fontSize: 'clamp(12px, 1.9cqw, 15px)' }}
+              style={{ fontSize: 'clamp(14px, 2.3cqw, 18px)' }}
             >
               {line}
             </p>
