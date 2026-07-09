@@ -157,7 +157,15 @@ function ArticleRow({
         {mmdd(article.date)}
       </span>
       {/* 标题 */}
-      <span className="text-gray-700 flex-1 min-w-0 truncate self-center" style={{ fontSize: fs }}>
+      <span
+        className="flex-1 min-w-0 truncate self-center transition-all duration-200"
+        style={{
+          fontSize: fs,
+          color: hovered ? ACCENT : '#374151',
+          transform: hovered ? 'translateX(5px) scale(1.03)' : 'translateX(0) scale(1)',
+          transformOrigin: 'left center',
+        }}
+      >
         {article.title}
       </span>
       {/* 标签 */}
