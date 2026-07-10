@@ -31,6 +31,51 @@ const AI_NOTES_MD = `# 1. 机器学习
 # 4. 大语言模型(LLM)
 大语言模型是深度学习领域专门设计用于自然语言处理领域特殊的深度神经网络。规模大，训练数据大，算力大，参数规模大，故称之为大语言模型。`;
 
+const PYTHON_REVIEW_MD = `# print函数
+### print(values, sep=" ", end="\\n", file=None, flush=False)
+- sep内赋值的内容将作为每个元素输出的间隔符。
+- end内赋值的内容将作为value结束末尾的换行。
+- file内可选择对文件的打开方式。常见有r：只读。w：只写。a：追加。添加+表示允许读写。
+- flush可选True和False两种选择，True代表每运行一步屏幕就立刻显示一步，False则是最后一起在屏幕显示出来。
+# 格式化输出
+### 格式化字符
+- %c：字符
+- %s：字符串
+- %d：十进制整数
+- %f：浮点数
+### 格式化输出模板
+### 基本格式化输出：使用%
+\`\`\`python
+
+print('我的名字是%s，年龄是%d岁' % ("01", 18))
+
+\`\`\`
+#### format()格式化输出
+\`\`\`python
+
+print("我的名字是：{}，年龄为：{}岁".format("01", 18))
+
+\`\`\`
+#### f表达式格式化输出(常用)
+\`\`\`python
+
+name, age = "01", 18
+
+print(f"名字是{name}，今年{age}岁")
+
+\`\`\`
+# 对象
+### python对象的三要素
+  - \`id\`：对象的唯一标识符。
+  - \`type\`：对象的类型。
+  - \`value\`：对象的值。
+# input函数
+可以自己输入需要的元素，默认以字符串形式返回，但可使用int以及其他类型进行强制转换。
+\`\`\`python
+a=int(input("请输入"))
+print(a)
+\`\`\``;
+
 const essays: Essay[] = [
   { id: 2, date: '2026-07-03', title: '滤波器与 PID 是一对', content: '控制课上讲 PID 整定，突然反应过来：滤波器和 PID 其实是一对，前者收拾信号，后者收拾误差。机器视觉里这俩谁也躲不掉，算是把专业课串起来了。', tags: ['控制工程', '学习'] },
   { id: 3, date: '2026-06-22', title: '最小可运行 Agent 跑通了', content: '跟着教程搭了个最小可运行的 Agent，工具调用跑通的那一刻有点上头。下一步想接 MediaPipe，让它真的"看得见"——这才对得起"机器视觉"这个方向。', tags: ['AI Agent', 'MediaPipe'] },
@@ -43,6 +88,14 @@ const essays: Essay[] = [
     content: '机器学习、深度学习、神经网络和大语言模型的概念梳理——从数据中获得规律，到不需要人工标注规律，再到模拟大脑神经元结构。',
     markdown: AI_NOTES_MD,
     tags: ['AI', '学习笔记'],
+  },
+  {
+    id: 7,
+    date: '2026-07-10',
+    title: 'Python 语法回顾',
+    content: '温习 Python 基础：print 函数的参数、三种字符串格式化方式（% / format / f-string）、对象三要素与 input 函数。',
+    markdown: PYTHON_REVIEW_MD,
+    tags: ['Python', '学习笔记'],
   },
 ];
 
@@ -275,10 +328,24 @@ const mdComponents: Components = {
       {children}
     </a>
   ),
-  code: ({ children }) => (
-    <code className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5" style={{ fontSize: '0.9em' }}>
+  code: ({ className, children }) => {
+    const isBlock = /language-/.test(className ?? '');
+    if (isBlock) {
+      return <code className={className}>{children}</code>;
+    }
+    return (
+      <code className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5" style={{ fontSize: '0.9em' }}>
+        {children}
+      </code>
+    );
+  },
+  pre: ({ children }) => (
+    <pre
+      className="bg-gray-900 text-gray-100 rounded-xl p-4 my-4 overflow-x-auto"
+      style={{ fontSize: 'clamp(12px, 1.8cqw, 14px)', lineHeight: 1.6 }}
+    >
       {children}
-    </code>
+    </pre>
   ),
   blockquote: ({ children }) => (
     <blockquote className="border-l-2 border-gray-200 pl-4 my-4 text-gray-500 italic">
