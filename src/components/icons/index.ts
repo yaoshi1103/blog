@@ -24,4 +24,5 @@ export {
   UserFolderIcon,
   AboutIcon,
   EssayIcon,
+  FriendLinkIcon,
 } from './FileIcon';

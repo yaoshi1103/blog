@@ -333,3 +333,27 @@ export const EssayIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     </g>
   </svg>
 );
+
+// FriendLink icon - business card stack (名片堆: 存放朋友网站地址)
+// Right-column visual language: concrete object + layered depth (echoes ThisPC/Trash)
+// Distinct from ArticleIcon (single document) by stacked cards + avatar motif
+export const FriendLinkIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    {/* back cards (tilted, layered depth) */}
+    <g transform="rotate(-6 24 24)">
+      <rect x="7" y="11" width="30" height="21" rx="2" fill="#dcdcdc" stroke="#888" strokeWidth="1" />
+    </g>
+    <g transform="rotate(5 24 24)">
+      <rect x="8" y="12" width="30" height="21" rx="2" fill="#ececec" stroke="#888" strokeWidth="1" />
+    </g>
+    {/* top card */}
+    <rect x="6" y="13" width="34" height="23" rx="2.5" fill="white" stroke="#555" strokeWidth="1.4" />
+    {/* avatar */}
+    <circle cx="15" cy="22" r="5" fill="#4a90d9" />
+    <path d="M15 19.5 a2.5 2.5 0 0 1 0 5 a2.5 2.5 0 0 1 0 -5" fill="#7ab8e8" opacity="0.55" />
+    {/* url lines */}
+    <line x1="23" y1="18.5" x2="37" y2="18.5" stroke="#555" strokeWidth="1.7" />
+    <line x1="23" y1="24" x2="34" y2="24" stroke="#aaa" strokeWidth="1.4" />
+    <line x1="23" y1="29" x2="37" y2="29" stroke="#aaa" strokeWidth="1.4" />
+  </svg>
+);
