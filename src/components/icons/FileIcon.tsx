@@ -298,3 +298,38 @@ export const UserFolderIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) =
     <path d="M6 16 Q6 14 8.5 14 H39.5 Q42 14 42 16.5 V19 H6 Z" fill="#ffe48a" />
   </svg>
 );
+
+// About icon - Windows system info panel: white rounded panel with blue "i"
+// Matches right-side EmailIcon/ThisPCIcon visual language (white body + gray stroke + blue accent)
+export const AboutIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <circle cx="24" cy="24" r="18" fill="white" stroke="#7a7a7a" strokeWidth="1.5" />
+    <circle cx="24" cy="16" r="2.5" fill="#4a90d9" />
+    <rect x="22.5" y="20" width="3" height="14" rx="1" fill="#4a90d9" />
+  </svg>
+);
+
+// Essay icon - fountain pen (斜置钢笔: 深蓝笔身 + 金尖 + 墨滴)
+// Right-column visual language: solid brand color + concrete object + dimensional detail
+// Distinct from ArticleIcon (white document page) by object shape and color
+export const EssayIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <g transform="rotate(45 24 24)">
+      {/* nib (gold triangular tip) */}
+      <path d="M24 42 L20 33 L28 33 Z" fill="#d4a843" stroke="#9a7320" strokeWidth="0.8" strokeLinejoin="round" />
+      <line x1="24" y1="42" x2="24" y2="33" stroke="#9a7320" strokeWidth="0.6" />
+      {/* gold ring (ferrule) */}
+      <rect x="19.5" y="30.5" width="9" height="2.5" fill="#d4a843" stroke="#9a7320" strokeWidth="0.6" />
+      {/* barrel (deep blue body) */}
+      <rect x="20" y="14" width="8" height="17" rx="3" fill="#3a7bc8" stroke="#2a5a9a" strokeWidth="0.8" />
+      {/* highlight */}
+      <rect x="22" y="15" width="1.5" height="15" rx="0.75" fill="white" opacity="0.4" />
+      {/* cap */}
+      <rect x="18.5" y="7" width="11" height="8" rx="2.5" fill="#2a3a4c" stroke="#1a2a3c" strokeWidth="0.8" />
+      {/* cap top */}
+      <rect x="20" y="5" width="8" height="3.5" rx="1.75" fill="#2a3a4c" stroke="#1a2a3c" strokeWidth="0.8" />
+      {/* ink drop */}
+      <circle cx="24" cy="43.5" r="1.3" fill="#4a90d9" />
+    </g>
+  </svg>
+);

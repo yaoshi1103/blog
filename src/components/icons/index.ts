@@ -22,4 +22,6 @@ export {
   DriveIcon,
   OpticalDriveIcon,
   UserFolderIcon,
+  AboutIcon,
+  EssayIcon,
 } from './FileIcon';

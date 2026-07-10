@@ -4,17 +4,17 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { DesktopIconData } from '@/lib/constants';
 import {
-  FileIcon, FolderIcon, TrashIcon, ArticleIcon, PricingIcon,
+  FileIcon, FolderIcon, TrashIcon, ArticleIcon, AboutIcon,
   DemoIcon, DocsIcon, EmailIcon, QuestionIcon,
-  BilibiliIcon, ThisPCIcon, SwitchModeIcon, ProductOSIcon, GitHubIcon,
+  BilibiliIcon, ThisPCIcon, SwitchModeIcon, EssayIcon, GitHubIcon,
 } from './icons';
 
 export const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   home: FileIcon,
   signup: ArticleIcon,
-  'product-os': ProductOSIcon,
+  'product-os': EssayIcon,
   'switch-mode': FolderIcon,
-  pricing: PricingIcon,
+  pricing: AboutIcon,
   customers: SwitchModeIcon,
   demo: DemoIcon,
   docs: DocsIcon,
