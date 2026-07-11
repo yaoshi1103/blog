@@ -301,7 +301,7 @@ export default function ArticlesPage() {
         className="w-full text-center py-3 text-gray-400 flex-shrink-0"
         style={{ fontSize: 'clamp(10px, 1.4cqw, 12px)' }}
       >
-        © 2026 Topaz · 记录与分享
+        © 2026 Topaz · 分享一些心得和感悟
       </div>
     </div>
   );

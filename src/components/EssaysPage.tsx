@@ -534,7 +534,7 @@ export default function EssaysPage() {
               className="w-full text-center py-3 text-gray-400 flex-shrink-0"
               style={{ fontSize: 'clamp(10px, 1.4cqw, 12px)' }}
             >
-              © 2026 Topaz · 日常的碎片想法
+              © 2026 Topaz · 记录学习笔记和一些想法
             </div>
           </motion.div>
         )}
