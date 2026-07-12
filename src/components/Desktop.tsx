@@ -155,7 +155,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
         playsInline
         preload="auto"
       >
-        <source src="https://github.com/yaoshi1103/blog/releases/download/v1.0.0/bizhi.mp4" type="video/mp4" />
+        <source src="https://github.com/Topaz059/blog/releases/download/v1.0.0/bizhi.mp4" type="video/mp4" />
       </video>
 
       {/* Center Illustration removed */}
