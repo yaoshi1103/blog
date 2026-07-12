@@ -78,6 +78,32 @@ a=int(input("请输入"))
 print(a)
 \`\`\``;
 
+const WORLD_MODEL_MD = `# 世界模型
+### 广义世界模型
+能够预测之后会发生什么的模型都可以被称之为广义世界模型。
+- LLM能够预测下一个Token，例如：智谱GLM5.2、Claude code Sonnet4.8等。
+- 视频生成模型可以预测下一帧的画面，例如：豆包Seedance2.5、即梦等。
+### 狭义世界模型(action-conditioned)
+必须以动作为条件，强调在动作之后世界会发生的变化。
+# 世界模型的三种功能性类型
+### 渲染器
+渲染器主要做的是输出观察到的信息，可以以图片或者视频的格式进行输出，例如：文生视频模型Sora(已下架)、交互式生成系统RTFM(Real-Time Frame Model)等都属于渲染器。
+### 模拟器
+模拟器的职责是输出世界本来的状态，需要遵循物理、几何、动力学的规律，追求极致真实，遵从牛顿定理，符合因果规律。常见的模拟器：Dreamer系列。
+### 规划器
+当给定了观察和目标后，规划器输出动作。与渲染器相反，渲染器主要是把动作转化为观察；规划期主要是把观察转化为动作。常见的规划器：VLA(Vision-Language-Action)。
+### 逻辑闭环过程
+输入真实情况→规划器决定动作→模拟器推演后果→渲染器画出预测的画面→对比误差修正下一轮输入。
+# RTFM与JEPA的对立
+两种路线的对立本质上是以Yann LeCun为代表提出的、与当前主流生成式AI截然不同的一条通往“世界模型”和自主智能的技术路径。
+
+| 对比维度     | **RTFM路线**    | **JEPA式路线**     |
+| -------- | ------------- | --------------- |
+| **输出**   | 直接生成2D像素图片/视频 | 输出抽象的特征向量       |
+| **目标**   | 看起来真实的画面      | 理解真实的物理规律       |
+| **计算负担** | 重             | 轻               |
+| **适用情况** | 适合展示结果、给人看    | 适合内部规划、给AI自己推理用 |`;
+
 const essays: Essay[] = [
   { id: 2, date: '2026-07-03', title: '滤波器与 PID 是一对', content: '控制课上讲 PID 整定，突然反应过来：滤波器和 PID 其实是一对，前者收拾信号，后者收拾误差。机器视觉里这俩谁也躲不掉，算是把专业课串起来了。', tags: ['控制工程', '学习'] },
   { id: 3, date: '2026-06-22', title: '最小可运行 Agent 跑通了', content: '跟着教程搭了个最小可运行的 Agent，工具调用跑通的那一刻有点上头。下一步想接 MediaPipe，让它真的"看得见"——这才对得起"机器视觉"这个方向。', tags: ['AI Agent', 'MediaPipe'] },
@@ -98,6 +124,15 @@ const essays: Essay[] = [
     content: '温习 Python 基础：print 函数的参数、三种字符串格式化方式（% / format / f-string）、对象三要素与 input 函数。',
     markdown: PYTHON_REVIEW_MD,
     tags: ['Python', '学习笔记'],
+  },
+  {
+    id: 8,
+    date: '2026-07-12',
+    title: '世界模型笔记',
+    content:
+      '能预测未来的模型都算世界模型：广义（预测下一个 token/帧）vs 狭义（以动作为条件）。三类功能性角色——渲染器、模拟器、规划器，以及 RTFM 与 JEPA 两条技术路线的对立。',
+    markdown: WORLD_MODEL_MD,
+    tags: ['AI', '世界模型', '学习笔记'],
   },
 ];
 
@@ -311,6 +346,11 @@ const mdComponents: Components = {
       {children}
     </h2>
   ),
+  h3: ({ children }) => (
+    <h3 className="font-medium text-gray-800 mt-4 mb-2" style={{ fontSize: 'clamp(14px, 2cqw, 18px)' }}>
+      {children}
+    </h3>
+  ),
   p: ({ children }) => (
     <p className="text-gray-600 leading-relaxed mb-4" style={{ fontSize: 'clamp(13px, 2cqw, 16px)' }}>
       {children}
@@ -387,6 +427,29 @@ const mdComponents: Components = {
     <blockquote className="border-l-2 border-gray-200 pl-4 my-4 text-gray-500 italic">
       {children}
     </blockquote>
+  ),
+  table: ({ children }) => (
+    <div className="my-4 overflow-x-auto">
+      <table
+        className="border-collapse w-full"
+        style={{ fontSize: 'clamp(12px, 1.8cqw, 15px)', border: '1px solid #e5e7eb' }}
+      >
+        {children}
+      </table>
+    </div>
+  ),
+  th: ({ children }) => (
+    <th
+      className="font-semibold text-gray-700 bg-[#f8fafc]"
+      style={{ border: '1px solid #e5e7eb', padding: '8px 12px', textAlign: 'left' }}
+    >
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="text-gray-600" style={{ border: '1px solid #e5e7eb', padding: '8px 12px' }}>
+      {children}
+    </td>
   ),
 };
 
