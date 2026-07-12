@@ -17,7 +17,7 @@ export {
   SwitchModeIcon,
   ProductOSIcon,
   GitHubIcon,
-  PostHogLogo,
+  TopazLogo,
   ArticleIcon,
   DriveIcon,
   OpticalDriveIcon,
