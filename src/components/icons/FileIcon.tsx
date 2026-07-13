@@ -117,7 +117,7 @@ export const BilibiliIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => 
 // This PC icon - Windows 10 style monitor with stand
 export const ThisPCIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <rect x="5" y="5" width="38" height="28" rx="2" fill="#4a5a6c" stroke="#2a3a4c" strokeWidth="1.5" />
+    <rect x="5" y="5" width="38" height="28" rx="2" fill="#4a5a6c" stroke="#5a6c80" strokeWidth="1.5" />
     <rect x="7" y="7" width="34" height="24" rx="1" fill="#7eb8e0" />
     <rect x="7" y="7" width="34" height="3" fill="white" opacity="0.25" />
     <path d="M19 33L17 41H31L29 33Z" fill="#5a6878" stroke="#3a4858" strokeWidth="1" strokeLinejoin="round" />
