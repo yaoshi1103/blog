@@ -26,6 +26,8 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
   const [maximizedWindows, setMaximizedWindows] = useState<string[]>([]);
+  // 当前激活（置顶）的窗口，用于层级管理
+  const [activeWindow, setActiveWindow] = useState<string | null>(null);
   // 任务栏搜索点击随笔后，用来通知随笔窗口进入对应详情的焦点 id
   const [essayFocusId, setEssayFocusId] = useState<number | null>(null);
 
@@ -38,6 +40,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
     }
     setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
     setMinimizedWindows((prev) => prev.filter((w) => w !== id));
+    setActiveWindow(id);
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -53,6 +56,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
   const handleOpenEssay = useCallback((essayId: number) => {
     setOpenWindows((prev) => (prev.includes('product-os') ? prev : [...prev, 'product-os']));
     setMinimizedWindows((prev) => prev.filter((w) => w !== 'product-os'));
+    setActiveWindow('product-os');
     setEssayFocusId(essayId);
   }, []);
 
@@ -62,6 +66,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
     setOpenWindows((prev) => prev.filter((w) => w !== id));
     setMinimizedWindows((prev) => prev.filter((w) => w !== id));
     setMaximizedWindows((prev) => prev.filter((w) => w !== id));
+    setActiveWindow((cur) => (cur === id ? null : cur));
     setWindowPositions((prev) => {
       const next = { ...prev };
       delete next[id];
@@ -79,15 +84,19 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
     ));
   }, []);
 
-  // 任务栏图标点击：可见→最小化，最小化→恢复
+  // 任务栏图标点击：可见→最小化，最小化→恢复并置顶
   const handleTaskbarClick = useCallback((id: string) => {
-    setMinimizedWindows((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((w) => w !== id);
-      }
-      return [...prev, id];
-    });
-  }, []);
+    const isMinimized = minimizedWindows.includes(id);
+    if (isMinimized) {
+      // 恢复被最小化的窗口，并提到最前
+      setMinimizedWindows((prev) => prev.filter((w) => w !== id));
+      setActiveWindow(id);
+    } else {
+      // 最小化当前可见窗口；若它正是最前窗口，则清空激活态
+      setMinimizedWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
+      setActiveWindow((cur) => (cur === id ? null : cur));
+    }
+  }, [minimizedWindows]);
 
   // 窗口拖动
   const [windowPositions, setWindowPositions] = useState<Record<string, { x: number; y: number }>>({});
@@ -205,9 +214,11 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
         {openWindows.filter((id) => !minimizedWindows.includes(id)).map((windowId) => (
           <motion.div
             key={windowId}
-            className="absolute bg-white rounded-lg shadow-2xl border border-gray-300 overflow-hidden z-30 window-container flex flex-col"
-            style={
-              maximizedWindows.includes(windowId)
+            className="absolute bg-white rounded-lg shadow-2xl border border-gray-300 overflow-hidden window-container flex flex-col"
+            onMouseDown={() => setActiveWindow(windowId)}
+            style={{
+              zIndex: activeWindow === windowId ? 40 : 30,
+              ...(maximizedWindows.includes(windowId)
                 ? { left: '0', top: '0', right: '0', bottom: '0', width: 'auto', height: 'auto', marginLeft: 0, marginTop: 0, borderRadius: 0 }
                 : {
                     width: '700px',
@@ -215,8 +226,8 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
                     ...(windowPositions[windowId]
                       ? { left: `${windowPositions[windowId].x}px`, top: `${windowPositions[windowId].y}px`, marginLeft: 0, marginTop: 0 }
                       : { left: '50%', top: 'calc(50% - 18px)', marginLeft: '-350px', marginTop: '-300px' }),
-                  }
-            }
+                  }),
+            }}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
