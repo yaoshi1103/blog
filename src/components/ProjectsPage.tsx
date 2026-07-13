@@ -146,7 +146,7 @@ export default function ProjectsPage() {
           className="flex flex-col w-full mx-auto"
           style={{
             gap: 'clamp(12px, 1.8cqw, 20px)',
-            maxWidth: '600px',
+            maxWidth: '800px',
           }}
         >
           {projects.map((project, index) => (
