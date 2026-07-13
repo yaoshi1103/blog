@@ -186,7 +186,7 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
       {/* Center Illustration removed */}
 
       {/* Left column icons */}
-      <div className="absolute left-4 md:left-6 top-3 flex flex-col gap-4 md:gap-5 z-20">
+      <div className="absolute left-4 md:left-6 top-2 flex flex-col gap-4 md:gap-5 z-20">
         {leftIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
