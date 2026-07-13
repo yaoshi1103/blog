@@ -185,28 +185,31 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
 
       {/* Center Illustration removed */}
 
-      {/* Left column icons */}
-      <div className="absolute left-4 md:left-6 top-2 flex flex-col gap-4 md:gap-5 z-20">
-        {leftIcons.map((icon) => (
-          <DesktopIcon
-            key={icon.id}
-            icon={icon}
-            isSelected={selectedId === icon.id}
-            onOpen={handleIconOpen}
-          />
-        ))}
-      </div>
+      {/* Left side: main column + social column (GitHub / Bilibili / 小红书) */}
+      <div className="absolute left-4 md:left-6 top-2 z-20 flex flex-row gap-0 md:gap-1 items-start">
+        {/* Main column */}
+        <div className="flex flex-col gap-4 md:gap-5">
+          {leftIcons.map((icon) => (
+            <DesktopIcon
+              key={icon.id}
+              icon={icon}
+              isSelected={selectedId === icon.id}
+              onOpen={handleIconOpen}
+            />
+          ))}
+        </div>
 
-      {/* Right column icons */}
-      <div className="absolute right-4 md:right-6 top-3 flex flex-col gap-4 md:gap-5 z-20">
-        {rightIcons.map((icon) => (
-          <DesktopIcon
-            key={icon.id}
-            icon={icon}
-            isSelected={selectedId === icon.id}
-            onOpen={handleIconOpen}
-          />
-        ))}
+        {/* Social column (to the right of 文章/随笔/项目) */}
+        <div className="flex flex-col gap-4 md:gap-5">
+          {rightIcons.map((icon) => (
+            <DesktopIcon
+              key={icon.id}
+              icon={icon}
+              isSelected={selectedId === icon.id}
+              onOpen={handleIconOpen}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Open windows (simulated) */}
