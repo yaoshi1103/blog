@@ -95,6 +95,17 @@ export const WORLD_MODEL_MD = `# 世界模型
 | **计算负担** | 重             | 轻               |
 | **适用情况** | 适合展示结果、给人看    | 适合内部规划、给AI自己推理用 |`;
 
+export const WORLD_MODEL_TERMS_MD = `# 世界模型名词解释
+
+- **ViT（Vision Transformer）**：把图像按一个一个切成方块，像处理单词一样处理这些方块，主要是使用 Transformer 来处理图像。是主流的视觉大模型的首选方案。
+- **Autoencoder（自编码器）**：先压缩再还原，编码器把图像压成低维的隐变量，解码器再把它还原。目的是逼着网络学会提取最核心的特征。
+- **MAE（Masked Autoencoder）**：一种简单的自监督学习机制。先遮住多数的方块，只保留少数的可见方块，然后需要解码器将剩余的部分补齐。
+- **师生网络（Teacher-Student Network）**：是一种对称的架构，学生网络负责从输入中学习特征，教师网络负责为学生生成标准答案（即预测目标）。使用学生网络的权重做 EMA 来缓慢更新，相当于老师比学生学得慢但更稳，以此引导模型提取高质量特征。
+- **DINO（DIstillation with NO labels）**：一种自监督学习框架，核心是师生网络。学生网络看图的局部裁剪，教师网络看图全局裁剪，让学生去拟合教师的输出。以此能让 ViT 自动学会分割物体轮廓，不需要人工标注。
+- **EMA（Exponential Moving Average）**：在上述 DINO 或 MAE 中，教师网络的权重是通过学生网络权重的滑动平均（EMA）来缓慢更新，保证了训练的稳定性。
+- **JEPA（Joint Embedding Predictive Architecture）**：Yann LeCun 力推的新范式。与 MAE 预测**像素**不同，JEPA 的预测目标是输入数据的抽象表征（嵌入）。例如：给一张不完整的图，它预测完整图的特征向量。`;
+
+
 export const essays: Essay[] = [
   { id: 2, date: '2026-07-03', title: '滤波器与 PID 是一对', content: '控制课上讲 PID 整定，突然反应过来：滤波器和 PID 其实是一对，前者收拾信号，后者收拾误差。机器视觉里这俩谁也躲不掉，算是把专业课串起来了。', tags: ['控制工程', '学习'] },
   { id: 3, date: '2026-06-22', title: '最小可运行 Agent 跑通了', content: '跟着教程搭了个最小可运行的 Agent，工具调用跑通的那一刻有点上头。下一步想接 MediaPipe，让它真的"看得见"——这才对得起"机器视觉"这个方向。', tags: ['AI Agent', 'MediaPipe'] },
@@ -123,6 +134,15 @@ export const essays: Essay[] = [
     content:
       '能预测未来的模型都算世界模型：广义（预测下一个 token/帧）vs 狭义（以动作为条件）。三类功能性角色——渲染器、模拟器、规划器，以及 RTFM 与 JEPA 两条技术路线的对立。',
     markdown: WORLD_MODEL_MD,
+    tags: ['AI', '世界模型', '学习笔记'],
+  },
+  {
+    id: 9,
+    date: '2026-07-13',
+    title: '世界模型名词解释',
+    content:
+      '世界模型相关核心术语速查：ViT、自编码器、MAE、师生网络、DINO、EMA、JEPA——从视觉 Transformer 到 Yann LeCun 力推的联合嵌入预测架构。',
+    markdown: WORLD_MODEL_TERMS_MD,
     tags: ['AI', '世界模型', '学习笔记'],
   },
 ];
