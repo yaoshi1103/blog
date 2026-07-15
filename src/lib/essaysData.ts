@@ -106,6 +106,270 @@ export const WORLD_MODEL_TERMS_MD = `# 世界模型名词解释
 - **JEPA（Joint Embedding Predictive Architecture）**：Yann LeCun 力推的新范式。与 MAE 预测**像素**不同，JEPA 的预测目标是输入数据的抽象表征（嵌入）。例如：给一张不完整的图，它预测完整图的特征向量。`;
 
 
+export const PYTHON_PRACTICE_MD = `### 1.1 内置数据类型
+
+| 类型      | 名称   | 特征                 | 典型用途  |
+| ------- | ---- | ------------------ | ----- |
+| \`int\`   | 整型   | 无小数点的数字            | 计数、索引 |
+| \`float\` | 浮点型  | 含小数点的数字            | 度量、权重 |
+| \`str\`   | 字符串型 | 由引号界定的字符序列         | 文本    |
+| \`bool\`  | 布尔型  | 仅 \`True\` / \`False\` | 条件判断  |
+
+
+### 1.2 关键约束
+- **文字必须包裹在引号中**（单引号 \`'\` 或双引号 \`"\` 均可，需成对）。
+- **数字禁止加引号**，否则会被当成文字。
+- 代码中的标点（引号、逗号、冒号、括号）必须使用英文半角符号，中文全角符号会导致 \`SyntaxError\`。
+
+\`\`\`python
+age = 18            # int，整型
+height = 1.75       # float，浮点型
+name = "小明"        # str，字符串型（引号界定）
+is_student = True   # bool，布尔型
+\`\`\`
+
+### 1.3 练习回顾
+- 声明标识符 \`my_name\` 并绑定字符串值：
+  \`\`\`python
+  my_name = "topaz"
+  \`\`\`
+- 声明标识符 \`study_hours\` 并绑定整型值：
+  \`\`\`python
+  study_hours = 5
+  \`\`\`
+
+---
+
+## 二、列表与字典
+
+### 2.1 列表
+列表就是一串按顺序排好的数据，里面的内容可以随时改。
+
+- 元素通过索引访问。
+- 从 0 开始数：首个元素编号为 \`0\`，第二个为 \`1\`，依此类推。这是最常见的越界/错位错误来源。
+
+\`\`\`python
+fruits = ["苹果", "香蕉", "橘子"]
+print(fruits[0])   # 输出：苹果  （索引 0 对应第一个元素）
+print(fruits[1])   # 输出：香蕉
+\`\`\`
+
+### 2.2 字典
+字典用键对应值的方式来存数据。
+
+\`\`\`python
+person = {"name": "小明", "age": 18, "city": "北京"}
+print(person["name"])   # 输出：小明
+print(person["age"])    # 输出：18
+\`\`\`
+
+### 2.3 二者区分
+- 列表：以索引访问元素。
+- 字典：以键访问元素。
+- 实际写代码时，配置文件多为 \`dict\`，批量数据多为 \`list\`。
+
+### 2.4 练习回顾
+\`\`\`python
+eat = ["苹果", "栗子", "香蕉"]
+print(eat[0])                       # 输出：苹果
+
+dicc = {"书名": "长城", "价格": "10", "有没有货": "无"}
+print(dicc["价格"])                 # 输出：10
+\`\`\`
+
+---
+
+## 三、字符串处理
+
+### 3.1 f-string
+以前缀 \`f\` 标记，花括号 \`{}\` 内可嵌入表达式，运行时被替换为对应值。
+
+\`\`\`python
+name = "小明"
+age = 18
+msg = f"我叫{name}，今年{age}岁"
+print(msg)   # 输出：我叫小明，今年18岁
+\`\`\`
+
+### 3.2 str.replace(old, new)
+返回将 \`old\` 子串替换为 \`new\` 子串后的新字符串。
+
+\`\`\`python
+s = "我喜欢苹果"
+s2 = s.replace("苹果", "香蕉")
+print(s2)   # 输出：我喜欢香蕉
+\`\`\`
+
+### 3.3 str.split(sep)
+以分隔符 \`sep\` 拆分字符串，返回由子串组成的列表。
+
+\`\`\`python
+s = "苹果,香蕉,橘子"
+parts = s.split(",")
+print(parts)   # 输出：['苹果', '香蕉', '橘子']
+\`\`\`
+
+### 3.4 练习回顾
+- 题：\`city = "北京"; hello = f"你好，{city}!"; print(hello)\` → 输出 \`你好，北京！\`
+- 题：\`text = "今天天气真好"; new = text.replace("真好", "一般"); print(new)\` → 输出 \`今天天气一般\`
+
+---
+
+## 四、函数定义
+
+### 4.1 定义与调用
+- \`def\` 语句用于定义函数，封装可复用的代码块。
+- 函数名后括号内声明形参。
+- \`return\` 语句将计算结果作为返回值传出；无 \`return\` 时函数返回 \`None\`。
+
+\`\`\`python
+def greet(name):          # name 为形参
+    sentence = f"你好，{name}！"
+    return sentence       # 返回计算结果
+
+result = greet("小明")    # "小明" 为实参
+print(result)            # 输出：你好，小明！
+\`\`\`
+
+### 4.2 形参 vs 实参
+- 形参：函数定义时括号中声明的占位标识符，此时尚无具体值。
+- 实参：函数调用时实际传入的具体值。
+- 调用发生时，实参按位置或按关键字绑定到对应的形参。
+
+\`\`\`python
+def add_one(n):      # n 为形参
+    return n + 1
+
+answer = add_one(5)  # 5 为实参，绑定到形参 n
+print(answer)        # 输出：6
+\`\`\`
+
+---
+
+## 五、异常处理
+
+### 5.1 try / except 结构
+- \`try\` 子句：包裹可能引发异常的代码。
+- \`except\` 子句：捕获指定异常并执行兜底逻辑，防止程序因未处理异常而终止。
+- 若不捕获异常，错误会一路向上传，最终导致程序中断并打印一大串报错信息。
+
+\`\`\`python
+try:
+    number = int("abc")   # 触发 ValueError：'abc' 无法转为 int
+except:
+    print("转数字失败了，但我接住了，程序继续跑")
+\`\`\`
+
+### 5.2 经典场景：除零错误
+\`\`\`python
+try:
+    print(10 / 0)         # 触发 ZeroDivisionError
+except:
+    print("不能除以0哦")   # 输出：不能除以0哦
+\`\`\`
+> 读取可能不存在的配置文件、调用可能失败的服务、执行可能除零的计算等位置，若缺少 \`try/except\` 即为典型的「未捕获异常」类 bug。
+
+---
+
+## 六、类与对象
+
+### 6.1 类与实例
+类定义一种类型，描述这类对象共有的属性和方法。通过 \`实例 = 类名(...)\` 创建实例。
+
+\`\`\`python
+class Cat:
+    def __init__(self, name):
+        self.name = name
+    def meow(self):
+        return self.name + "喵"
+
+mimi = Cat("咪咪")
+print(mimi.meow())   # 输出：咪咪喵
+\`\`\`
+
+### 6.2 构造方法
+\`__init__\` 是构造方法，创建实例时由解释器自动调用，用来给新对象设置初始属性。
+
+- **构造方法的首个形参固定为 \`self\`**，代表正在被创建的这个实例。
+
+### 6.3 self 是什么
+\`self\` 是实例方法的第一个形参，调用时由解释器自动传入，代表调用该方法的那个实例。
+
+- **self 随调用者变化**：同一份方法，谁调用，self 就是谁。
+- 调用 \`mimi.meow()\` 在内部等价于 \`Cat.meow(mimi)\`，即把 \`mimi\` 作为实参自动传给形参 \`self\`。
+
+\`\`\`python
+class Cat:
+    def __init__(self, name):
+        self.name = name
+    def meow(self):
+        return self.name + "喵"
+
+mimi = Cat("咪咪")
+huahua = Cat("花花")
+print(mimi.meow())     # 输出：咪咪喵（self 是 mimi）
+print(huahua.meow())   # 输出：花花喵（self 是 huahua）
+\`\`\`
+
+### 6.4 self.name = name 逐个看
+以 \`self.name = name\` 为例，从左到右四部分：
+
+- \`self\`：这一刻正在被创建的那个实例。
+- \`.name\`：这个实例身上的一个属性，专门用来存名字。
+- \`=\`：把右边的值装进左边的属性。
+- \`name\`（右边）：方法收到的参数值，比如 \`"咪咪"\`。
+
+整行含义：把传进来的名字，存进这个对象自己的名字属性里。
+
+- **左右两个 name 不是一回事**：右边是参数，左边是属性。
+
+走一遍：\`mimi = Cat("咪咪")\` 时，解释器造出 \`mimi\`，把 \`"咪咪"\` 绑给参数 \`name\`，\`self\` 等于 \`mimi\`，执行 \`self.name = name\` 之后，\`mimi\` 就有了 \`name\` 属性，值为 \`"咪咪"\`。
+
+### 6.5 完整示例
+学生（存两个属性）：
+\`\`\`python
+class Student:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def intro(self):
+        return "我叫" + self.name + "，今年" + str(self.age) + "岁"
+
+xiaoming = Student("小明", 18)
+print(xiaoming.intro())   # 输出：我叫小明，今年18岁
+\`\`\`
+
+矩形（同一方法，不同实例结果不同）：
+\`\`\`python
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    def area(self):
+        return self.width * self.height
+
+a = Rectangle(3, 4)
+b = Rectangle(5, 6)
+print(a.area())   # 输出：12（此时 self 是 a）
+print(b.area())   # 输出：30（此时 self 是 b）
+\`\`\`
+
+### 6.6 练习与易错点
+题：写一个 \`Book\` 类，创建时存书名和价格，有方法 \`描述()\` 返回 \`《书名》售价价格元\`，创建《Python入门》价格 59 并打印。
+\`\`\`python
+class Book:
+    def __init__(self, shuming, jiage):
+        self.shuming = shuming
+        self.jiage = jiage
+    def 描述(self):
+        return self.shuming + "售价" + str(self.jiage) + "元"   # 数字拼文字要先转成文字
+
+book1 = Book("《Python入门》", 59)
+print(book1.描述())   # 输出：《Python入门》售价59元
+\`\`\`
+
+- **易错点**：数字（如 \`59\`）不能直接和文字相加，否则报错。凡是把数字拼进句子，先套 \`str()\` 转成文字。`;
+
 export const essays: Essay[] = [
   { id: 2, date: '2026-07-03', title: '滤波器与 PID 是一对', content: '控制课上讲 PID 整定，突然反应过来：滤波器和 PID 其实是一对，前者收拾信号，后者收拾误差。机器视觉里这俩谁也躲不掉，算是把专业课串起来了。', tags: ['控制工程', '学习'] },
   { id: 3, date: '2026-06-22', title: '最小可运行 Agent 跑通了', content: '跟着教程搭了个最小可运行的 Agent，工具调用跑通的那一刻有点上头。下一步想接 MediaPipe，让它真的"看得见"——这才对得起"机器视觉"这个方向。', tags: ['AI Agent', 'MediaPipe'] },
@@ -138,11 +402,19 @@ export const essays: Essay[] = [
   },
   {
     id: 9,
-    date: '2026-07-13',
+    date: '2026-07-14',
     title: '世界模型名词解释',
     content:
       '世界模型相关核心术语速查：ViT、自编码器、MAE、师生网络、DINO、EMA、JEPA——从视觉 Transformer 到 Yann LeCun 力推的联合嵌入预测架构。',
     markdown: WORLD_MODEL_TERMS_MD,
     tags: ['AI', '世界模型', '学习笔记'],
+  },
+  {
+    id: 10,
+    date: '2026-07-15',
+    title: 'Python 练习笔记',
+    content: 'Python 基础练习：内置数据类型、列表与字典、字符串处理（f-string / replace / split）、函数定义与形参实参，以及 try/except 异常处理。',
+    markdown: PYTHON_PRACTICE_MD,
+    tags: ['Python', '学习笔记'],
   },
 ];
