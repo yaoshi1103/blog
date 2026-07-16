@@ -11,55 +11,77 @@ const introLines: string[] = [
   '正在学习 AI Agent 开发',
 ];
 
-/* 网站正式上线时间 —— GitHub 仓库 Topaz059/blog 的创建时间（UTC） */
-const SITE_LAUNCH = new Date('2026-06-22T06:25:17Z');
+/* 网站起始时间：GitHub blog 仓库创建时间 2026-06-22T06:25:17Z（北京时间 14:25:17） */
+const SITE_START_TIME = new Date('2026-06-22T14:25:17+08:00').getTime();
 
-/* 统计正文字数：去掉代码块、markdown 符号后，数字符个数（中文按字数、英文按字母数） */
-function countText(text: string): number {
-  let t = text.replace(/```[\s\S]*?```/g, ' '); // 去代码块
-  t = t.replace(/`[^`]*`/g, ' '); // 去行内代码
-  t = t.replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1'); // 去图片，保留描述
-  t = t.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1'); // 去链接，保留文字
-  t = t.replace(/[#>*_~|`\-]/g, ''); // 去 markdown 符号
-  t = t.replace(/\s+/g, ''); // 去空白
-  return t.length;
-}
+/**
+ * 统计 markdown 正文字数：
+ * - 去除 markdown 标记（标题井号、列表符号、代码块围栏、表格分隔、引用、图片、链接等）
+ * - 中文字符按字数计
+ * - 英文/数字按单词数计
+ */
+function countWords(md: string): number {
+  if (!md) return 0;
+  let text = md;
+  // 去除代码块（```...```）
+  text = text.replace(/```[\s\S]*?```/g, ' ');
+  // 去除行内代码（`...`）
+  text = text.replace(/`[^`]*`/g, ' ');
+  // 去除图片 ![alt](url)
+  text = text.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');
+  // 去除链接 [text](url)，保留 text
+  text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+  // 去除表格分隔行 | --- | --- |
+  text = text.replace(/^\s*\|[\s:|-]+\|\s*$/gm, ' ');
+  // 去除行首的标题/列表/引用符号
+  text = text.replace(/^[\s>#*\-+]+/gm, '');
+  // 去除表格单元格的竖线分隔符
+  text = text.replace(/\|/g, ' ');
+  // 去除剩余的 markdown 强调符号
+  text = text.replace(/[*_~]/g, '');
 
-/* 累计「文章 + 随笔」的正文字数 */
-function totalWords(): number {
-  let n = 0;
-  for (const a of articles) {
-    if (a.markdown) n += countText(a.markdown);
-  }
-  for (const e of essays) {
-    if (e.markdown) n += countText(e.markdown);
-    else if (e.content) n += countText(e.content);
-  }
-  return n;
-}
+  // 统计中文字符数
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  // 统计英文单词数（连续的字母/数字序列视为一个单词）
+  const englishWords = (text.match(/[A-Za-z0-9]+/g) || []).length;
 
-/* 把毫秒差格式化成「X 天 X 小时 X 分 X 秒」 */
-function formatUptime(ms: number): string {
-  const total = Math.floor(ms / 1000);
-  const days = Math.floor(total / 86400);
-  const hours = Math.floor((total % 86400) / 3600);
-  const minutes = Math.floor((total % 3600) / 60);
-  const seconds = total % 60;
-  return `${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+  return chineseChars + englishWords;
 }
 
 export default function AboutPage() {
-  // 每次加载时实时计算已写文章字数
-  const words = useMemo(() => totalWords(), []);
+  // 计算总字数（每次组件挂载时重新计算）
+  const totalWords = useMemo(() => {
+    const articleWords = articles.reduce(
+      (sum, a) => sum + countWords(a.markdown || ''),
+      0
+    );
+    const essayWords = essays.reduce(
+      (sum, e) => sum + countWords(e.markdown || ''),
+      0
+    );
+    return articleWords + essayWords;
+  }, []);
 
-  // 网站运行时间：每秒跳动更新
-  const [uptime, setUptime] = useState('');
+  // 运行时间（每秒更新）
+  const [uptime, setUptime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
   useEffect(() => {
-    const start = SITE_LAUNCH.getTime();
-    const tick = () => setUptime(formatUptime(Date.now() - start));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    const update = () => {
+      const diff = Date.now() - SITE_START_TIME;
+      if (diff < 0) {
+        setUptime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      setUptime({ days, hours, minutes, seconds });
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -118,40 +140,54 @@ export default function AboutPage() {
           ))}
         </div>
 
-        {/* 数据统计模块：已写文章字数 + 网站运行时间 */}
+        {/* 两个统计模块：左右并排 */}
         <div
-          className="flex items-stretch justify-center gap-4 mt-7"
-          style={{ width: 'clamp(280px, 64cqw, 520px)' }}
+          className="flex w-full mt-8 gap-3"
+          style={{ maxWidth: 'clamp(280px, 60cqw, 480px)' }}
         >
-          {/* 字数卡片 */}
+          {/* 模块一：文章字数 */}
           <div
-            className="flex-1 rounded-xl px-4 py-3 text-center"
-            style={{ background: '#fff', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}
+            className="flex-1 flex flex-col items-center justify-center rounded-xl px-3 py-4"
+            style={{
+              background: '#fff',
+              border: '1px solid rgba(0,0,0,0.06)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            }}
           >
             <div
-              className="font-semibold text-[#0078d4]"
-              style={{ fontSize: 'clamp(20px, 4cqw, 28px)' }}
+              className="font-semibold text-[#0078d4] leading-none"
+              style={{ fontSize: 'clamp(20px, 3.6cqw, 28px)' }}
             >
-              {words.toLocaleString('zh-CN')}
+              {totalWords.toLocaleString()}
             </div>
-            <div className="text-gray-500 mt-1" style={{ fontSize: 'clamp(11px, 1.8cqw, 13px)' }}>
-              已写文章字数
+            <div
+              className="text-gray-500 mt-1.5"
+              style={{ fontSize: 'clamp(11px, 1.8cqw, 13px)' }}
+            >
+              文章字数
             </div>
           </div>
 
-          {/* 运行时间卡片 */}
+          {/* 模块二：网站运行时间 */}
           <div
-            className="flex-1 rounded-xl px-4 py-3 text-center"
-            style={{ background: '#fff', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}
+            className="flex-1 flex flex-col items-center justify-center rounded-xl px-3 py-4"
+            style={{
+              background: '#fff',
+              border: '1px solid rgba(0,0,0,0.06)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            }}
           >
             <div
-              className="font-semibold text-[#0078d4]"
-              style={{ fontSize: 'clamp(12px, 2.2cqw, 15px)', lineHeight: 1.5 }}
+              className="font-semibold text-[#0078d4] leading-none whitespace-nowrap"
+              style={{ fontSize: 'clamp(15px, 2.8cqw, 22px)' }}
             >
-              {uptime || '计算中…'}
+              {uptime.days}天 {uptime.hours}时 {uptime.minutes}分 {uptime.seconds}秒
             </div>
-            <div className="text-gray-500 mt-1" style={{ fontSize: 'clamp(11px, 1.8cqw, 13px)' }}>
-              网站已运行
+            <div
+              className="text-gray-500 mt-1.5"
+              style={{ fontSize: 'clamp(11px, 1.8cqw, 13px)' }}
+            >
+              运行时间
             </div>
           </div>
         </div>
