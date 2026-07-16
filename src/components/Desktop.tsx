@@ -13,6 +13,7 @@ import ArticlesPage from './ArticlesPage';
 import EssaysPage from './EssaysPage';
 import ProjectsPage from './ProjectsPage';
 import { iconMap } from './DesktopIcon';
+import VideoParallaxBackground from './VideoParallaxBackground';
 import { leftIcons, rightIcons } from '@/lib/constants';
 
 const allIcons = [...leftIcons, ...rightIcons];
@@ -176,18 +177,8 @@ const Desktop = forwardRef<DesktopHandle>((_props, ref) => {
 
   return (
     <div className="fixed inset-0 top-10 pb-9 overflow-hidden" style={{ backgroundColor: '#1a1a2e' }}>
-      {/* Video background */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover"
-        poster="/poster.jpg"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-      >
-        <source src="https://github.com/Topaz059/blog/releases/download/v1.0.0/bizhi.mp4" type="video/mp4" />
-      </video>
+      {/* Video background with mouse parallax */}
+      <VideoParallaxBackground />
 
       {/* Center Illustration removed */}
 
