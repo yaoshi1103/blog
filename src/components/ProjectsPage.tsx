@@ -14,6 +14,13 @@ type Project = {
 
 const projects: Project[] = [
   {
+    id: 7,
+    title: '个人博客',
+    date: '2026-07-13',
+    content: '从 0 到 1 搭建的个人博客网站，做成可点图标、开窗口的桌面形态而非传统文档站。Next.js 14 静态导出 + Cloudflare Pages 零成本上线，文章/随笔/项目/友链都是独立窗口模块。窗口拖拽、Dock 动效、Markdown 渲染全手写，源码开源到 GitHub。',
+    tags: ['Next.js', '静态部署', '前端'],
+  },
+  {
     id: 1,
     title: '虚拟角色交互系统',
     date: '2026-07-01',
@@ -47,13 +54,6 @@ const projects: Project[] = [
     date: '2026-05-15',
     content: '跑了 MediaPipe Hands 的官方 demo，21 个关键点实时跟踪。接下来要做的是把关键点坐标喂给滤波器，再驱动 PID——这是虚拟角色系统的第一层。识别精度够用，延迟在可接受范围。',
     tags: ['MediaPipe', '机器视觉', '手势识别'],
-  },
-  {
-    id: 6,
-    title: 'PID 控制器可视化',
-    date: '2026-04-20',
-    content: '用 Python + matplotlib 把 PID 三项的作用可视化出来：P 消除稳态误差，I 消除余差，D 抑制超调。调参的时候对着图看比对着公式想直观太多了，控制工程果然还是得可视化。',
-    tags: ['PID', 'Python', '控制工程'],
   },
 ];
 
