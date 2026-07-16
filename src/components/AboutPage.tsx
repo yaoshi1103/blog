@@ -56,7 +56,7 @@ export default function AboutPage() {
       0
     );
     const essayWords = essays.reduce(
-      (sum, e) => sum + countWords(e.markdown || ''),
+      (sum, e) => sum + countWords(e.markdown || e.content || ''),
       0
     );
     return articleWords + essayWords;
