@@ -24,7 +24,7 @@ export default function DesktopRipple() {
       setRipples((prev) => [...prev, { id, x: e.clientX, y: e.clientY }]);
       window.setTimeout(() => {
         setRipples((prev) => prev.filter((r) => r.id !== id));
-      }, 950);
+      }, 650);
     };
 
     document.addEventListener('click', onClick);
@@ -44,7 +44,7 @@ export default function DesktopRipple() {
             height: 0,
             transform: 'translate(-50%, -50%)',
             border: '3px solid rgba(59,130,246,0.95)',
-            animation: 'icon-ripple 0.9s ease-out forwards',
+            animation: 'icon-ripple 0.6s ease-out forwards',
           }}
         />
       ))}
