@@ -80,22 +80,30 @@ function MidLayerVisual() {
 }
 
 /* ---------------- 近层：细小星点 ---------------- */
-// 程序生成 count 个星点的 box-shadow 字符串
-function generateStarShadows(count: number): string {
+// 程序生成 count 颗带发光光晕的星点 box-shadow 字符串
+// 每颗星拆成"锐利内核 + 柔光晕"两条阴影：
+//   - 内核先写（box-shadow 列表中先写的在上层），blur=0 保证星点中心锐利
+//   - 光晕后写，blur=5px 渗出四周，颜色偏冷贴近夜空，alpha 衰减到 35%
+//   两者同坐标，光晕中心被内核盖住、四周渗出 → "恒星"效果
+function generateGlowingStarShadows(count: number): string {
   const shadows: string[] = [];
   for (let i = 0; i < count; i++) {
     const x = Math.floor(Math.random() * 100);
     const y = Math.floor(Math.random() * 100);
     const size = Math.random() > 0.7 ? 2 : 1; // 30% 概率 2px，其余 1px
-    const alpha = 0.4 + Math.random() * 0.5; // 0.4-0.9 透明度
+    const alpha = 0.55 + Math.random() * 0.4; // 0.55-0.95 透明度（较原 0.4-0.9 提升）
+    // 1) 锐利内核
     shadows.push(`${x}vw ${y}vh 0 ${size}px rgba(255, 255, 255, ${alpha.toFixed(2)})`);
+    // 2) 柔光晕：blur=5px, spread=size+1，颜色偏冷，alpha 衰减到 35%
+    const haloAlpha = (alpha * 0.35).toFixed(2);
+    shadows.push(`${x}vw ${y}vh 5px ${size + 1}px rgba(200, 220, 255, ${haloAlpha})`);
   }
   return shadows.join(', ');
 }
 
 function NearLayerVisual() {
   // useState 初始化函数只在客户端首次渲染时执行，避免 SSR hydration mismatch
-  const [starShadows] = useState(() => generateStarShadows(40));
+  const [starShadows] = useState(() => generateGlowingStarShadows(40));
   return (
     <div className="absolute inset-0">
       <div

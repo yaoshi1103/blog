@@ -42,3 +42,7 @@ next-env.d.ts
 
 # IDE 本地配置
 .trae/
+
+# 本地临时工作目录（dev 缓存、会话草稿等）
+.nextdev/
+.workbuddy/
