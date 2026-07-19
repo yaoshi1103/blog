@@ -7,8 +7,8 @@ import { essays } from '@/lib/essaysData';
 /* 个人介绍数据 */
 const introLines: string[] = [
   '福建工科研究生在读',
-  'INFJ · 喜欢 vibe coding',
-  '正在学习 AI Agent 开发',
+  'INFJ · 喜欢Agent开发',
+  '正在进行端侧模型部署与调优项目',
 ];
 
 /* 网站起始时间：GitHub blog 仓库创建时间 2026-06-22T06:25:17Z（北京时间 14:25:17） */
