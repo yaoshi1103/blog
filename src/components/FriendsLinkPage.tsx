@@ -111,7 +111,7 @@ export default function FriendsLinkPage() {
         {/* 互换友链入口（按钮，新标签页打开申请表单） */}
         <div className="flex justify-center mb-8">
           <a
-            href="https://v.wjx.cn/vm/tCpUMXG.aspx#"
+            href="https://v.wjx.cn/vm/Op28tQP.aspx#"
             target="_blank"
             rel="noopener noreferrer"
             title="互换友链"
